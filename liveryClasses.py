@@ -7,7 +7,7 @@ import random
 
 
 def hexToTuple(hex):
-    return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
+    return tuple(int(hex[i:i + 2], 16) for i in (0, 2, 4))
 
 
 currentDirectory = os.getcwd()
@@ -30,34 +30,35 @@ class ACCLivery:
         self.DazzleTopColour = (208, 42, 64)
         # im not letting people fuck with the decals layer json cba same with sponsors (yet?)
         self.DazzleBottomColour = (74, 73, 135)
- # Getter methods
+
+    # Getter methods
 
     def setFolderName(self, folderName):
-        self._folderName = folderName
+        self.folderName = folderName
 
     def setInGameName(self, inGameName):
-        self._inGameName = inGameName
+        self.inGameName = inGameName
 
     def setCarModelType(self, carModelType):
-        self._carModelType = carModelType
+        self.carModelType = carModelType
 
     def setBaseColour(self, baseColour):
-        self._baseColour = baseColour
+        self.baseColour = baseColour
 
     def setBaseMaterialId(self, baseMaterialId):
-        self._baseMaterialId = baseMaterialId
+        self.baseMaterialId = baseMaterialId
 
     def setRimColour(self, rimColour):
-        self._rimColour = rimColour
+        self.rimColour = rimColour
 
     def setRimMaterialId(self, rimMaterialId):
-        self._rimMaterialId = rimMaterialId
+        self.rimMaterialId = rimMaterialId
 
     def setRimTapeColour(self, rimTapeColour):
-        self._rimTapeColour = rimTapeColour
+        self.rimTapeColour = rimTapeColour
 
     def setRimTapeMaterialId(self, rimTapeMaterialId):
-        self._rimTapeMaterialId = rimTapeMaterialId
+        self.rimTapeMaterialId = rimTapeMaterialId
 
     def setRaceNumber(self, raceNumber):
         self.raceNumber = raceNumber
@@ -68,7 +69,7 @@ class ACCLivery:
     def setDazzleBottomColour(self, DazzleBottomColour):
         self.DazzleBottomColour = DazzleBottomColour
 
-     # Setter methods
+    # Setter methods
     def setFolderName(self, folderName):
         self.folderName = folderName
 
@@ -163,22 +164,23 @@ class ACCLivery:
         os.chdir(currentDirectory)
         first = changeColoursOfImage(
             dazzlePath, (0, 0, 0), self.DazzleTopColour)
-        first.save(carPath+"/decals.png")
+        first.save(carPath + "/decals.png")
         final = changeColoursOfImage(
-            carPath+"/decals.png", (255, 255, 255), self.DazzleBottomColour)
-        final.save(carPath+"/decals.png")
+            carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
+        final.save(carPath + "/decals.png")
 
     def createJsonFile(self):
-        examplePath = os.path.join(currentDirectory, "acc","example.json")
-        jsonDirectory = os.path.join(currentDirectory,"temp",self.seed)
+        examplePath = os.path.join(currentDirectory, "acc", "example.json")
+        jsonDirectory = os.path.join(currentDirectory, "temp", self.seed)
         os.chdir(jsonDirectory)
         os.mkdir('Cars')
-        jsonDirectory = os.path.join(jsonDirectory,'Cars',self.seed+'.json')
+        jsonDirectory = os.path.join(jsonDirectory, 'Cars', self.seed + '.json')
         os.chdir(currentDirectory)
         shutil.copy(examplePath, jsonDirectory)
-        with open(jsonDirectory, 'r') as f:
-            data = json.loads(f)
+        with open('path_to_file/person.json', 'r') as f:
+            data = json.load(f)
         print(data)
+
 
 car1 = ACCLivery()
 car1.setDazzleTopColour(hexToTuple('1E1E1E'))
