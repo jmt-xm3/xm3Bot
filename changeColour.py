@@ -1,4 +1,4 @@
-!from PIL import Image  # chat gpt did all this lowkey
+from PIL import Image  # chat gpt did all this lowkey
 
 
 def change_colour(image_path, target_color, replacement_color, tolerance=0):

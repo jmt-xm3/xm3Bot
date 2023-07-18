@@ -177,9 +177,9 @@ class ACCLivery:
         jsonDirectory = os.path.join(jsonDirectory, 'Cars', self.seed + '.json')
         os.chdir(currentDirectory)
         shutil.copy(examplePath, jsonDirectory)
-        with open('path_to_file/person.json', 'r') as f:
+        with open(jsonDirectory, 'rb') as f:
             data = json.load(f)
-        print(data)
+        print(data["cupCategory"])
 
 
 car1 = ACCLivery()
