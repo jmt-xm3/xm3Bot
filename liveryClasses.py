@@ -176,10 +176,9 @@ class ACCLivery:
         jsonDirectory = os.path.join(jsonDirectory,'Cars',self.seed+'.json')
         os.chdir(currentDirectory)
         shutil.copy(examplePath, jsonDirectory)
-        car = json.loads(jsonDirectory)
-        print(car)
-
-
+        with open(jsonDirectory, 'r') as f:
+            data = json.loads(f)
+        print(data)
 
 car1 = ACCLivery()
 car1.setDazzleTopColour(hexToTuple('1E1E1E'))
