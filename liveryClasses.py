@@ -180,6 +180,21 @@ class ACCLivery:
         with open(jsonDirectory, 'rb') as f:
             data = json.load(f)
         print(data["cupCategory"])
+        data['raceNumber'] = self.raceNumber
+        data['skinColor1Id'] = self.baseColour
+        data['skinColor2Id'] = self.baseColour
+        data['skinColor3Id'] = self.baseColour
+        data['skinMaterialType1'] = self.baseMaterialId
+        data['skinMaterialType2'] = self.baseMaterialId
+        data['skinMaterialType3'] = self.baseMaterialId
+        data['rimColor1Id'] = self.rimColour
+        data['rimColor2Id'] = self.rimTapeColour
+        data['rimMaterialType1'] = self.rimMaterialId
+        data['rimMaterialType2'] = self.rimTapeMaterialId
+        data['teamName'] = self.inGameName
+        data['customSkinName'] = self.folderName
+        with open(jsonDirectory,'w') as out:
+                json.dump(data,out)     
 
 
 car1 = ACCLivery()
