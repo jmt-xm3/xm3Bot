@@ -176,8 +176,8 @@ class ACCLivery:
         jsonDirectory = os.path.join(jsonDirectory,'Cars',self.seed+'.json')
         os.chdir(currentDirectory)
         shutil.copy(examplePath, jsonDirectory)
-
-
+        car = json.loads(jsonDirectory)
+        print(car)
 
 
 
