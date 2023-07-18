@@ -1,15 +1,22 @@
-from changeColour import change_colour
+from changeColour import change_colour as changeColoursOfImage
 
 import os
+import shutil
+import json
+import random
+
 
 def hexToTuple(hex):
-  return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
+    return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
+
 
 currentDirectory = os.getcwd()
-accCarModels = [{"carModelType": 31 , "dazzleTemplate":"EVO2DAZZLE.png"}]
+accCarModels = [{"carModelType": 31, "dazzleTemplate": "EVO2DAZZLE.png"}]
+
 
 class ACCLivery:
     def __init__(self):
+        self.seed = str(random.randint(1, 100000))
         self.folderName = "DEFAULT REV"
         self.inGameName = "DEFAULT REV"
         self.carModelType = 31  # AUDI EVO 2
@@ -21,8 +28,10 @@ class ACCLivery:
         self.rimTapeMaterialId = 0
         self.raceNumber = 000
         self.DazzleTopColour = (208, 42, 64)
-        self.DazzleBottomColour = (74, 73, 135) # im not letting people fuck with the decals layer json cba same with sponsors (yet?)
+        # im not letting people fuck with the decals layer json cba same with sponsors (yet?)
+        self.DazzleBottomColour = (74, 73, 135)
  # Getter methods
+
     def setFolderName(self, folderName):
         self._folderName = folderName
 
@@ -140,22 +149,40 @@ class ACCLivery:
                 dazzleTemplate = car['dazzleTemplate']
         dazzlePath = currentDirectory + "/acc/"
         dazzlePath = os.path.join(dazzlePath, dazzleTemplate)
-        carPath = os.path.join(currentDirectory, self.folderName)
         try:
+            os.chdir(os.path.join(currentDirectory, "temp"))
+            os.mkdir(self.seed)
+            os.chdir(os.path.join(os.getcwd(), self.seed))
             os.mkdir('Liveries')
+            os.chdir(os.path.join(os.getcwd(), 'Liveries'))
+            os.mkdir(self.folderName)
         except FileExistsError:
             pass
-        os.chdir('Liveries')
-        os.mkdir(self.folderName)
+        carPath = os.path.join(currentDirectory, 'temp',
+                               self.seed, 'Liveries', self.folderName)
         os.chdir(currentDirectory)
-        first = change_colour(dazzlePath, (0,0,0), self.DazzleTopColour)
+        first = changeColoursOfImage(
+            dazzlePath, (0, 0, 0), self.DazzleTopColour)
         first.save(carPath+"/decals.png")
-        final = change_colour(carPath+"/decals.png", (255,255,255), self.DazzleBottomColour)
+        final = changeColoursOfImage(
+            carPath+"/decals.png", (255, 255, 255), self.DazzleBottomColour)
         final.save(carPath+"/decals.png")
+
+    def createJsonFile(self):
+        examplePath = os.path.join(currentDirectory, "acc","example.json")
+        jsonDirectory = os.path.join(currentDirectory,"temp",self.seed)
+        os.chdir(jsonDirectory)
+        os.mkdir('Cars')
+        jsonDirectory = os.path.join(jsonDirectory,'Cars',self.seed+'.json')
+        os.chdir(currentDirectory)
+        shutil.copy(examplePath, jsonDirectory)
+
+
+
+
 
 car1 = ACCLivery()
 car1.setDazzleTopColour(hexToTuple('1E1E1E'))
 car1.setDazzleBottomColour(hexToTuple('EDFF21'))
-car1.createDazzle()       
-
-
+car1.createDazzle()
+car1.createJsonFile()

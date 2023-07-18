@@ -1,4 +1,5 @@
-from PIL import Image  # chat gpt did all this lowkey 
+from PIL import Image  # chat gpt did all this lowkey
+
 
 def change_colour(image_path, target_color, replacement_color, tolerance=0):
     """
@@ -14,7 +15,8 @@ def change_colour(image_path, target_color, replacement_color, tolerance=0):
         Image object: The modified image.
     """
     img = Image.open(image_path)
-    img = img.convert("RGBA")  # Convert the image to RGBA mode to handle transparency
+    # Convert the image to RGBA mode to handle transparency
+    img = img.convert("RGBA")
 
     data = img.getdata()
     new_data = []
@@ -26,12 +28,14 @@ def change_colour(image_path, target_color, replacement_color, tolerance=0):
             and abs(item[1] - target_color[1]) <= tolerance
             and abs(item[2] - target_color[2]) <= tolerance
         ):
-            new_data.append(replacement_color + (item[3],))  # Preserve the original alpha value
+            # Preserve the original alpha value
+            new_data.append(replacement_color + (item[3],))
         else:
             new_data.append(item)
 
     img.putdata(new_data)
     return img
+
 
 if __name__ == "__main__":
     input_image_path = "/home/jonan0/Documents/GitHub/xm3Bot/EVO2DAZZLE.png"
@@ -41,5 +45,6 @@ if __name__ == "__main__":
     # You can also provide a tolerance value (e.g., 20) to adjust how closely the colors should match.
     # For example, a larger tolerance will match a broader range of similar colors.
 
-    output_image = change_color(input_image_path, target_color_rgb, replacement_color_rgb)
+    output_image = change_color(
+        input_image_path, target_color_rgb, replacement_color_rgb)
     output_image.save("/home/jonan0/Documents/GitHub/xm3Bot/NEWEVO2DAZZLE.png")
