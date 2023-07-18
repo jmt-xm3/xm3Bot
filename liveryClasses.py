@@ -142,16 +142,20 @@ class ACCLivery:
         dazzlePath = os.path.join(dazzlePath, dazzleTemplate)
         carPath = os.path.join(currentDirectory, self.folderName)
         try:
-            os.mkdir(self.folderName)
+            os.mkdir('Liveries')
         except FileExistsError:
             pass
+        os.chdir('Liveries')
+        os.mkdir(self.folderName)
+        os.chdir(currentDirectory)
         first = change_colour(dazzlePath, (0,0,0), self.DazzleTopColour)
-        first.save(carPath+"/temp.png")
-        final = change_colour(carPath+"/temp.png", (255,255,255), self.DazzleBottomColour)
+        first.save(carPath+"/decals.png")
+        final = change_colour(carPath+"/decals.png", (255,255,255), self.DazzleBottomColour)
         final.save(carPath+"/decals.png")
 
 car1 = ACCLivery()
-car1.setDazzleTopColour((0,0,0))
+car1.setDazzleTopColour(hexToTuple('1E1E1E'))
+car1.setDazzleBottomColour(hexToTuple('EDFF21'))
 car1.createDazzle()       
 
 
