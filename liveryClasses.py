@@ -180,6 +180,7 @@ class ACCLivery:
         with open(jsonDirectory, 'rb') as f:
             data = json.load(f)
         print(data["cupCategory"])
+        data['carModelType'] = self.carModelType
         data['raceNumber'] = self.raceNumber
         data['skinColor1Id'] = self.baseColour
         data['skinColor2Id'] = self.baseColour
@@ -200,5 +201,7 @@ class ACCLivery:
 car1 = ACCLivery()
 car1.setDazzleTopColour(hexToTuple('1E1E1E'))
 car1.setDazzleBottomColour(hexToTuple('EDFF21'))
+car1.setBaseColour(300)
+car1.setBaseMaterialId(2)
 car1.createDazzle()
 car1.createJsonFile()
