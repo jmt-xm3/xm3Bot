@@ -147,10 +147,9 @@ class ACCLivery:
     def createDazzle(self):
         for car in accCarModels:
             if car['carModelType'] == self.carModelType:
-                dazzleTemplate = car['name'] + 'DAZZLE.PNG'
-                sponsorTemplate = car['name'] + 'SPONSORS.PNG'
-        dazzlePath = currentDirectory + "/acc/"
-        dazzlePath = os.path.join(dazzlePath, dazzleTemplate)
+                dazzleTemplate = car['name'] + 'DAZZLE.png'
+                sponsorTemplate = car['name'] + 'SPONSORS.png'
+        dazzlePath = os.path.join(currentDirectory,'acc', dazzleTemplate)
         try:
             os.chdir(os.path.join(currentDirectory, "temp"))
             os.mkdir(self.seed)
@@ -163,6 +162,7 @@ class ACCLivery:
         carPath = os.path.join(currentDirectory, 'temp',
                                self.seed, 'Liveries', self.folderName)
         os.chdir(currentDirectory)
+        print(dazzlePath)
         first = changeColoursOfImage(
             dazzlePath, (0, 0, 0), self.DazzleTopColour)
         first.save(carPath + "/decals.png")
@@ -170,6 +170,7 @@ class ACCLivery:
             carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
         final.save(carPath + "/decals.png")
         sponsorPath = os.path.join(currentDirectory,'acc',sponsorTemplate)
+        carPath = os.path.join(carPath,'sponsors.png')
         shutil.copy(sponsorPath, carPath)
 
     def createJsonFile(self):
@@ -200,11 +201,11 @@ class ACCLivery:
         with open(jsonDirectory,'w') as out:
                 json.dump(data,out)     
 
-
-car1 = ACCLivery()
-car1.setDazzleTopColour(hexToTuple('1E1E1E'))
-car1.setDazzleBottomColour(hexToTuple('EDFF21'))
-car1.setBaseColour(300)
-car1.setBaseMaterialId(2)
-car1.createDazzle()
-car1.createJsonFile()
+if __name__ == "__main__":
+    car1 = ACCLivery()
+    car1.setDazzleTopColour(hexToTuple('1E1E1E'))
+    car1.setDazzleBottomColour(hexToTuple('EDFF21'))
+    car1.setBaseColour(300)
+    car1.setBaseMaterialId(2)
+    car1.createDazzle()
+    car1.createJsonFile()
