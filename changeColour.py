@@ -45,6 +45,6 @@ if __name__ == "__main__":
     # You can also provide a tolerance value (e.g., 20) to adjust how closely the colors should match.
     # For example, a larger tolerance will match a broader range of similar colors.
 
-    output_image = change_color(
+    output_image = change_colour(
         input_image_path, target_color_rgb, replacement_color_rgb)
     output_image.save("/home/jonan0/Documents/GitHub/xm3Bot/NEWEVO2DAZZLE.png")

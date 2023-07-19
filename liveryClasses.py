@@ -11,7 +11,7 @@ def hexToTuple(hex):
 
 
 currentDirectory = os.getcwd()
-accCarModels = [{"carModelType": 31, "dazzleTemplate": "EVO2DAZZLE.png"}]
+accCarModels = [{"carModelType": 31, "name": "EVO2"}]
 
 
 class ACCLivery:
@@ -147,7 +147,8 @@ class ACCLivery:
     def createDazzle(self):
         for car in accCarModels:
             if car['carModelType'] == self.carModelType:
-                dazzleTemplate = car['dazzleTemplate']
+                dazzleTemplate = car['name'] + 'DAZZLE.PNG'
+                sponsorTemplate = car['name'] + 'SPONSORS.PNG'
         dazzlePath = currentDirectory + "/acc/"
         dazzlePath = os.path.join(dazzlePath, dazzleTemplate)
         try:
@@ -168,6 +169,8 @@ class ACCLivery:
         final = changeColoursOfImage(
             carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
         final.save(carPath + "/decals.png")
+        sponsorPath = os.path.join(currentDirectory,'acc',sponsorTemplate)
+        shutil.copy(sponsorPath, carPath)
 
     def createJsonFile(self):
         examplePath = os.path.join(currentDirectory, "acc", "example.json")
