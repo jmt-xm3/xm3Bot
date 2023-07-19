@@ -176,7 +176,7 @@ class ACCLivery:
         sponsorPng = os.path.join(currentDirectory,'acc',sponsorTemplate) # copy sponsors.png and finish jsons from acc folder to livery folder
         sponsorJson = os.path.join(currentDirectory,'acc','sponsors.json')
         decalsJson = os.path.join(currentDirectory,'acc','decals.json')
-        shutil.copy(sponsorPng, os.path.join(carPath,'sponsor.png'))
+        shutil.copy(sponsorPng, os.path.join(carPath,'sponsors.png'))
         shutil.copy(sponsorJson, os.path.join(carPath,'sponsors.json'))
         shutil.copy(decalsJson, os.path.join(carPath,'decals.json'))
 
@@ -190,6 +190,10 @@ class ACCLivery:
         shutil.copy(examplePath, jsonDirectory)
         with open(jsonDirectory, 'rb') as f:
             data = json.load(f)
+        if self.carModelType == 20:
+            data['skinTemplateKey'] = 103
+        if self.carModelType == 8:
+            data['skinTemplateKey'] = 103 # fuck kunos for making me do this
         data['carModelType'] = self.carModelType
         data['raceNumber'] = self.raceNumber
         data['skinColor1Id'] = self.baseColour
@@ -212,15 +216,18 @@ class ACCLivery:
         
     def zipCar(self):
         self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID))
+        tempDirectory = os.path.join(currentDirectory,'temp')
+        os.chdir(tempDirectory)
         shutil.make_archive(str(self.liveryID),'zip', self.zipPath)
+        os.chdir(currentDirectory)
 
 if __name__ == "__main__":
     car1 = ACCLivery()
     car1.setDazzleTopColour(hexToTuple('1E1E1E'))
-    car1.setDazzleBottomColour(hexToTuple('EDFF21'))
-    car1.setBaseColour(231)
+    car1.setDazzleBottomColour(hexToTuple('b57ebf'))
+    car1.setBaseColour(341)
     car1.setBaseMaterialId(3)
-    car1.setCarModelType(20)
+    car1.setCarModelType(21)
     car1.setFolderName('JMT774')
     car1.setInGameName('JMT')
     car1.setRaceNumber(774)
