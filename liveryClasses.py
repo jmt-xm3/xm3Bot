@@ -16,9 +16,9 @@ accCarModels = [{"carModelType": 20, "name": "V8"},{"carModelType": 21, "name": 
 
 class ACCLivery:
     def __init__(self):
-        self.seed = str(random.randint(1, 100000))
-        self.folderName = "DEFAULT REV"
-        self.inGameName = "DEFAULT REV"
+        self.liveryID = str(random.randint(1, 100000))
+        self.folderName = "DEFAULT"
+        self.inGameName = "DEFAULT"
         self.carModelType = 31  # AUDI EVO 2
         self.baseColour = 341  # Black
         self.baseMaterialId = 0  # Glossy
@@ -28,9 +28,8 @@ class ACCLivery:
         self.rimTapeMaterialId = 0
         self.raceNumber = 000
         self.DazzleTopColour = (208, 42, 64)
-        # im not letting people fuck with the decals layer json cba same with sponsors (yet?)
         self.DazzleBottomColour = (74, 73, 135)
-
+        self.zipPath = ''
     # Getter methods
 
     def setFolderName(self, folderName):
@@ -105,6 +104,9 @@ class ACCLivery:
 
     def setDazzleBottomColour(self, DazzleBottomColour):
         self.DazzleBottomColour = DazzleBottomColour
+    
+    def setZipPath(self, zipPath):
+        self.zipPath = zipPath
 
     # Getter methods
     def getFolderName(self):
@@ -143,6 +145,9 @@ class ACCLivery:
     def getDazzleBottomColour(self):
         return self.DazzleBottomColour
 
+    def getZipPath(self):
+        return self.zipPath
+    
     # Other methods
     def createDazzle(self):
         for car in accCarModels:
@@ -152,15 +157,15 @@ class ACCLivery:
         dazzlePath = os.path.join(currentDirectory,'acc', dazzleTemplate)
         try:
             os.chdir(os.path.join(currentDirectory, "temp"))
-            os.mkdir(self.seed)
-            os.chdir(os.path.join(os.getcwd(), self.seed))
+            os.mkdir(self.liveryID)
+            os.chdir(os.path.join(os.getcwd(), self.liveryID))
             os.mkdir('Liveries')
             os.chdir(os.path.join(os.getcwd(), 'Liveries'))
             os.mkdir(self.folderName)
         except FileExistsError:
             pass
         carPath = os.path.join(currentDirectory, 'temp',
-                               self.seed, 'Liveries', self.folderName)
+                               self.liveryID, 'Liveries', self.folderName)
         os.chdir(currentDirectory)
         print(dazzlePath)
         first = changeColoursOfImage(
@@ -175,10 +180,10 @@ class ACCLivery:
 
     def createJsonFile(self):
         examplePath = os.path.join(currentDirectory, "acc", "example.json")
-        jsonDirectory = os.path.join(currentDirectory, "temp", self.seed)
+        jsonDirectory = os.path.join(currentDirectory, "temp", self.liveryID)
         os.chdir(jsonDirectory)
         os.mkdir('Cars')
-        jsonDirectory = os.path.join(jsonDirectory, 'Cars', self.seed + '.json')
+        jsonDirectory = os.path.join(jsonDirectory, 'Cars', self.liveryID + '.json')
         os.chdir(currentDirectory)
         shutil.copy(examplePath, jsonDirectory)
         with open(jsonDirectory, 'rb') as f:
@@ -199,7 +204,13 @@ class ACCLivery:
         data['teamName'] = self.inGameName
         data['customSkinName'] = self.folderName
         with open(jsonDirectory,'w') as out:
-                json.dump(data,out)     
+                json.dump(data,out)
+        out.close()     
+        f.close()
+        
+        def ZipCar(self):
+            self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID))
+            print(self.zipPath)
 
 if __name__ == "__main__":
     car1 = ACCLivery()
@@ -209,3 +220,4 @@ if __name__ == "__main__":
     car1.setBaseMaterialId(2)
     car1.createDazzle()
     car1.createJsonFile()
+    car1.ZipCar()
