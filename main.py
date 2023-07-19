@@ -11,10 +11,8 @@ def clearTempDirectory():
     os.mkdir("temp")
 
 
-clearTempDirectory()
 
 # example bot figure out what to do later
-'''
 import discord
 
 intents = discord.Intents.default()
@@ -32,6 +30,6 @@ async def on_message(message):
         return
 
     if message.content.startswith('free tay k'):
-        await message.channel.send('word free tay k')
+        await message.channel.send(file=discord.File('/home/jonan0/Documents/GitHub/xm3Bot/23027.zip'))
 
-client.run('MTEyOTE5MDk3MTc5NjYzNTY0OA.GRSyl9.HIHgEWFNQ-VTt1MiyRYZDF41iutxWUAussL-So') '''
+client.run('MTEyOTE5MDk3MTc5NjYzNTY0OA.GRSyl9.HIHgEWFNQ-VTt1MiyRYZDF41iutxWUAussL-So') 
