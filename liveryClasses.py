@@ -179,11 +179,11 @@ class ACCLivery:
         decalsJson = os.path.join(currentDirectory,'acc','decals.json')
         shutil.copy(sponsorPng, os.path.join(carPath,'sponsors.png'))
         shutil.copy(sponsorJson, os.path.join(carPath,'sponsors.json'))
-        shutil.copy(decalsJson, os.path.join(carPath,'decals.json'))
-        toDDS(os.path.join(carPath,'decals'),os.path.join(carPath,'decals_0'))
+        shutil.copy(decalsJson, os.path.join(carPath,'decals.json')) # DDS works but acc is a shit game and won't recognize them unless you turn off texDDS in menuSettings.json
+        '''toDDS(os.path.join(carPath,'decals'),os.path.join(carPath,'decals_0')
         shutil.copy(os.path.join(carPath,'decals_0.dds'),os.path.join(carPath,'decals_1.dds'))
         toDDS(os.path.join(carPath,'sponsors'),os.path.join(carPath,'sponsors_0'))
-        shutil.copy(os.path.join(carPath,'sponsors_0.dds'),os.path.join(carPath,'sponsors_1.dds'))
+        shutil.copy(os.path.join(carPath,'sponsors_0.dds'),os.path.join(carPath,'sponsors_1.dds'))'''
 
     def createJsonFile(self):
         examplePath = os.path.join(currentDirectory, "acc", "example.json")
@@ -230,9 +230,9 @@ if __name__ == "__main__":
     car1 = ACCLivery()
     car1.setDazzleTopColour(hexToTuple('1E1E1E'))
     car1.setDazzleBottomColour(hexToTuple('b57ebf'))
-    car1.setBaseColour(341)
-    car1.setBaseMaterialId(3)
-    car1.setCarModelType(21)
+    car1.setBaseColour(300)
+    car1.setBaseMaterialId(2)
+    car1.setCarModelType(20)
     car1.setFolderName('JMT774')
     car1.setInGameName('JMT')
     car1.setRaceNumber(774)

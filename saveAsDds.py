@@ -1,5 +1,4 @@
 from wand import image
-import os
 
 def saveAsDds(victimPath,victimDestination):
     with image.Image(filename=victimPath+'.png') as img:

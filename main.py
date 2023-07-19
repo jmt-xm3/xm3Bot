@@ -29,7 +29,16 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('free tay k'):
-        await message.channel.send(file=discord.File('/home/jonan0/Documents/GitHub/xm3Bot/23027.zip'))
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+@bot.command()
+async def test(ctx):
+    print('nice')
+    pass
 
 client.run('MTEyOTE5MDk3MTc5NjYzNTY0OA.GRSyl9.HIHgEWFNQ-VTt1MiyRYZDF41iutxWUAussL-So') 
