@@ -1,4 +1,5 @@
 from changeColour import change_colour as changeColoursOfImage
+from saveAsDds import saveAsDds as toDDS
 
 import os
 import shutil
@@ -173,12 +174,16 @@ class ACCLivery:
         final = changeColoursOfImage(
             carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
         final.save(carPath + "/decals.png")
-        sponsorPng = os.path.join(currentDirectory,'acc',sponsorTemplate) # copy sponsors.png and finish jsons from acc folder to livery folder
+        sponsorPng = os.path.join(currentDirectory,'acc',sponsorTemplate) # copy sponsors.png and finish JSON from acc folder to livery folder
         sponsorJson = os.path.join(currentDirectory,'acc','sponsors.json')
         decalsJson = os.path.join(currentDirectory,'acc','decals.json')
         shutil.copy(sponsorPng, os.path.join(carPath,'sponsors.png'))
         shutil.copy(sponsorJson, os.path.join(carPath,'sponsors.json'))
         shutil.copy(decalsJson, os.path.join(carPath,'decals.json'))
+        toDDS(os.path.join(carPath,'decals'),os.path.join(carPath,'decals_0'))
+        shutil.copy(os.path.join(carPath,'decals_0.dds'),os.path.join(carPath,'decals_1.dds'))
+        toDDS(os.path.join(carPath,'sponsors'),os.path.join(carPath,'sponsors_0'))
+        shutil.copy(os.path.join(carPath,'sponsors_0.dds'),os.path.join(carPath,'sponsors_1.dds'))
 
     def createJsonFile(self):
         examplePath = os.path.join(currentDirectory, "acc", "example.json")
