@@ -167,7 +167,6 @@ class ACCLivery:
         carPath = os.path.join(currentDirectory, 'temp',
                                self.liveryID, 'Liveries', self.folderName)
         os.chdir(currentDirectory)
-        print(dazzlePath)
         first = changeColoursOfImage(
             dazzlePath, (0, 0, 0), self.DazzleTopColour)
         first.save(carPath + "/decals.png")
@@ -191,7 +190,6 @@ class ACCLivery:
         shutil.copy(examplePath, jsonDirectory)
         with open(jsonDirectory, 'rb') as f:
             data = json.load(f)
-        print(data["cupCategory"])
         data['carModelType'] = self.carModelType
         data['raceNumber'] = self.raceNumber
         data['skinColor1Id'] = self.baseColour
