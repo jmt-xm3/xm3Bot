@@ -174,9 +174,12 @@ class ACCLivery:
         final = changeColoursOfImage(
             carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
         final.save(carPath + "/decals.png")
-        sponsorPath = os.path.join(currentDirectory,'acc',sponsorTemplate)
-        carPath = os.path.join(carPath,'sponsors.png')
-        shutil.copy(sponsorPath, carPath)
+        sponsorPng = os.path.join(currentDirectory,'acc',sponsorTemplate) # copy sponsors.png and finish jsons from acc folder to livery folder
+        sponsorJson = os.path.join(currentDirectory,'acc','sponsors.json')
+        decalsJson = os.path.join(currentDirectory,'acc','decals.json')
+        shutil.copy(sponsorPng, os.path.join(carPath,'sponsor.png'))
+        shutil.copy(sponsorJson, os.path.join(carPath,'sponsors.json'))
+        shutil.copy(decalsJson, os.path.join(carPath,'decals.json'))
 
     def createJsonFile(self):
         examplePath = os.path.join(currentDirectory, "acc", "example.json")
@@ -208,16 +211,21 @@ class ACCLivery:
         out.close()     
         f.close()
         
-        def ZipCar(self):
-            self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID))
-            print(self.zipPath)
+        
+    def zipCar(self):
+        self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID))
+        shutil.make_archive(str(self.liveryID),'zip', self.zipPath)
 
 if __name__ == "__main__":
     car1 = ACCLivery()
     car1.setDazzleTopColour(hexToTuple('1E1E1E'))
     car1.setDazzleBottomColour(hexToTuple('EDFF21'))
-    car1.setBaseColour(300)
-    car1.setBaseMaterialId(2)
+    car1.setBaseColour(231)
+    car1.setBaseMaterialId(3)
+    car1.setCarModelType(20)
+    car1.setFolderName('JMT774')
+    car1.setInGameName('JMT')
+    car1.setRaceNumber(774)
     car1.createDazzle()
     car1.createJsonFile()
-    car1.ZipCar()
+    car1.zipCar()
