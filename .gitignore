@@ -1,4 +1,4 @@
 /temp
-/vscode
-/idea
-/pycache
+/.vscode
+/.idea
+/__pycache__
