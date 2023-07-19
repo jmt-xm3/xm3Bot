@@ -1,0 +1,958 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!DOCTYPE html>
+<html dir="ltr" platform="win" lang="en-GB"><head>
+    <title id="reader-title">Custom Car - ACC Wiki (Unofficial)</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src chrome:; img-src data: *; media-src *; object-src 'none'">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta name="viewport" content="width=device-width; user-scalable=0">
+    <link rel="stylesheet" href="chrome://global/skin/aboutReader.css" type="text/css">
+    <link rel="stylesheet" href="chrome://global/skin/aboutReaderPocket.css" type="text/css">
+    <link rel="localization" href="toolkit/about/aboutReader.ftl">
+    <link rel="localization" href="toolkit/branding/brandings.ftl">
+  <link rel="stylesheet" href="chrome://global/skin/narrate.css"></head>
+
+  <body class="dark sans-serif loaded" style="--font-size: 20px; --content-width: 30em;">
+    <div class="top-anchor"></div>
+
+    <div id="toolbar" class="toolbar-container scrolled">
+      <div class="toolbar reader-toolbar">
+        <div class="reader-controls" articledir="ltr">
+          <button class="close-button toolbar-button" aria-labelledby="toolbar-close" data-telemetry-id="reader-close">
+            <span class="hover-label" id="toolbar-close" data-l10n-id="about-reader-toolbar-close">Close Reader View</span>
+          </button>
+          <ul class="dropdown style-dropdown">
+            <li>
+              <button class="dropdown-toggle toolbar-button style-button" aria-labelledby="toolbar-type-controls" data-telemetry-id="reader-type-controls">
+                <span class="hover-label" id="toolbar-type-controls" data-l10n-id="about-reader-toolbar-type-controls">Type controls</span>
+              </button>
+            </li>
+            <li class="dropdown-popup">
+              <div class="dropdown-arrow"></div>
+              <div class="font-type-buttons radiorow"><input id="radio-itemsans-serif-button" type="radio" class="radio-button" name="font-type" checked="checked"><label for="radio-itemsans-serif-button" class="sans-serif-button" data-l10n-id="about-reader-font-type-sans-serif" checked="true">Sans-serif</label><input id="radio-itemserif-button" type="radio" class="radio-button" name="font-type"><label for="radio-itemserif-button" class="serif-button" data-l10n-id="about-reader-font-type-serif">Serif</label></div>
+              <div class="font-size-buttons buttonrow">
+                <button class="minus-button" data-l10n-id="about-reader-toolbar-minus" title="Decrease Font Size"></button>
+                <span class="font-size-value">5</span>
+                <button class="plus-button" data-l10n-id="about-reader-toolbar-plus" title="Increase Font Size"></button>
+              </div>
+              <div class="content-width-buttons buttonrow">
+                <button class="content-width-minus-button" data-l10n-id="about-reader-toolbar-contentwidthminus" title="Decrease Content Width"></button>
+                <span class="content-width-value">3</span>
+                <button class="content-width-plus-button" data-l10n-id="about-reader-toolbar-contentwidthplus" title="Increase Content Width"></button>
+              </div>
+              <div class="line-height-buttons buttonrow">
+                <button class="line-height-minus-button" data-l10n-id="about-reader-toolbar-lineheightminus" title="Decrease Line Height"></button>
+                <span class="line-height-value">4</span>
+                <button class="line-height-plus-button" data-l10n-id="about-reader-toolbar-lineheightplus" title="Increase Line Height"></button>
+              </div>
+              <div class="color-scheme-buttons radiorow"><input id="radio-itemlight-button" type="radio" class="radio-button" name="color-scheme"><label for="radio-itemlight-button" class="light-button" data-l10n-id="about-reader-color-scheme-light" title="Colour Scheme Light">Light</label><input id="radio-itemdark-button" type="radio" class="radio-button" name="color-scheme"><label for="radio-itemdark-button" class="dark-button" data-l10n-id="about-reader-color-scheme-dark" title="Colour Scheme Dark">Dark</label><input id="radio-itemsepia-button" type="radio" class="radio-button" name="color-scheme"><label for="radio-itemsepia-button" class="sepia-button" data-l10n-id="about-reader-color-scheme-sepia" title="Colour Scheme Sepia">Sepia</label><input id="radio-itemauto-button" type="radio" class="radio-button" name="color-scheme" checked="checked"><label for="radio-itemauto-button" class="auto-button" data-l10n-id="about-reader-color-scheme-auto" checked="true" title="Colour Scheme Auto">Auto</label></div>
+            </li>
+          </ul>
+        <ul class="dropdown narrate-dropdown"><li><button class="dropdown-toggle toolbar-button narrate-toggle" data-telemetry-id="reader-listen" aria-label="Listen (N)"><span class="hover-label">Listen (N)</span></button></li><li class="dropdown-popup"><div class="narrate-row narrate-control"><button class="narrate-skip-previous" disabled="disabled" title="Backwards"></button><button class="narrate-start-stop" title="Start (N)"></button><button class="narrate-skip-next" disabled="disabled" title="Forwards"></button></div><div class="narrate-row narrate-rate"><input class="narrate-rate-input" value="0" step="5" max="100" min="-100" type="range" title="Speed"></div><div class="narrate-row narrate-voices"><div class="voiceselect voice-select"><button class="select-toggle" aria-controls="voice-options">
+      <span class="label">Voice:</span> <span class="current-voice">Default</span>
+    </button>
+    <div class="options" id="voice-options" role="listbox"><button data-value="automatic" class="option selected" tabindex="-1" role="option" aria-selected="true">Default</button><button data-value="urn:moz-tts:sapi:Microsoft George - English (United Kingdom)?en-GB" class="option" tabindex="-1" role="option">Microsoft George - English (United Kingdom)</button><button data-value="urn:moz-tts:sapi:Microsoft Hazel - English (United Kingdom)?en-GB" class="option" tabindex="-1" role="option">Microsoft Hazel - English (United Kingdom)</button><button data-value="urn:moz-tts:sapi:Microsoft Hazel Desktop - English (Great Britain)?en-GB" class="option" tabindex="-1" role="option">Microsoft Hazel Desktop - English (Great Britain)</button><button data-value="urn:moz-tts:sapi:Microsoft Susan - English (United Kingdom)?en-GB" class="option" tabindex="-1" role="option">Microsoft Susan - English (United Kingdom)</button><button data-value="urn:moz-tts:sapi:Microsoft Zira Desktop - English (United States)?en-US" class="option" tabindex="-1" role="option">Microsoft Zira Desktop - English (United States)</button></div></div></div><div class="dropdown-arrow"></div></li></ul><button data-buttonid="pocket-button" data-telemetry-id="reader-save-to-pocket" class="toolbar-button pocket-button" aria-labelledby="label-pocket-button" style="background-image: url(&quot;chrome://global/skin/icons/pocket.svg&quot;);"><span class="hover-label" id="label-pocket-button" data-l10n-id="about-reader-toolbar-savetopocket">Save To Pocket</span></button></div>
+      </div>
+    </div>
+
+    <div class="container" style="--line-height: 1.6em;" dir="ltr" lang="en-GB">
+      <div class="header reader-header reader-show-element">
+        <a class="domain reader-domain" href="https://www.acc-wiki.info/wiki/Custom_Car">acc-wiki.info</a>
+        <div class="domain-border"></div>
+        <h1 class="reader-title">Custom Car - ACC Wiki (Unofficial)</h1>
+        <div class="credits reader-credits"></div>
+        <div class="meta-data">
+          <div class="reader-estimated-time" data-l10n-args="{&quot;range&quot;:&quot;10–13&quot;,&quot;rangePlural&quot;:&quot;other&quot;}" data-l10n-id="about-reader-estimated-read-time" dir="ltr">10–13 minutes</div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="content">
+        <div class="moz-reader-content reader-show-element"><div id="readability-page-1" class="page"><div id="mw-content-text" dir="ltr" lang="en">
+
+<p><a href="https://www.acc-wiki.info/wiki/File:Cars_8_101.jpg"><img alt="Cars 8 101.jpg" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/500px-Cars_8_101.jpg" data-file-width="1500" data-file-height="866" class="moz-reader-block-img" width="500" height="289"></a></p>
+<p>In the game, you have the opportunity to create your own vehicle 
+livery for each vehicle. The body can be modified externally or it can 
+be replaced completely.<br>
+Operators of multiplayer servers can assign vehicle liveries, drivers or teams via an access list <a href="https://www.acc-wiki.info/wiki/Server_Configuration#entrylist.json" title="Server Configuration">Server Configuration / entrylist.json</a>.
+</p>
+
+
+<h2><span id="InGame-Skin-Editor">InGame-Skin-Editor</span></h2>
+<ul><li>select a Race Class &amp; Team-Tile in Multiplayer or ...</li>
+<li>select the "Open Series" in Single Player</li>
+<li>click on "ADD" and choose one of the vehicle types</li></ul>
+<h3><span id="Individual_Settings">Individual Settings</span></h3>
+<ul><li>Race Number</li>
+<li>Team Name</li>
+<li>Nationality</li>
+<li>Banner &amp; Sponsors</li>
+<li>Livery-Template</li>
+<li>Body and Tire colored pick</li></ul>
+<p><a href="https://www.acc-wiki.info/wiki/File:Livery_Editor_0.png"><img alt="Livery Editor 0.png" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/400px-Livery_Editor_0.png" data-file-width="2560" data-file-height="1440" width="400" height="225"></a>
+<a href="https://www.acc-wiki.info/wiki/File:Livery_Editor_1.png"><img alt="Livery Editor 1.png" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/400px-Livery_Editor_1.png" data-file-width="2560" data-file-height="1440" width="400" height="225"></a>
+<a href="https://www.acc-wiki.info/wiki/File:Livery_Editor_2.png"><img alt="Livery Editor 2.png" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/400px-Livery_Editor_2.png" data-file-width="2560" data-file-height="1440" width="400" height="225"></a>
+</p>
+<h2><span id="How_can_I_modify_my_paintwork_outside_of_the_game?"></span><span id="How_can_I_modify_my_paintwork_outside_of_the_game.3F">How can I modify my paintwork outside of the game?</span></h2>
+<p>a skin mod consists of the file in the cars folder and a folder with 
+several different files in the liveries folder. Your find here Documents
+ \ Assetto Corsa Competizione \ Customs<br>
+</p>
+<ul><li>...Cars
+<ul><li>myTeam.json</li></ul></li>
+<li>...Liveries \ myTeamFolder \
+<ul><li>decals.png &amp; sponsors.png</li>
+<li>decals.json &amp; sponsors.json</li>
+<li>decals_0.dds &amp; sponsors_0.dds ( this file generates the game when you view your project in the showroom )</li>
+<li>decals_1.dds &amp; sponsors_1.dds ( this file generates the game when you look at your project on the track )</li>
+<li>optional: ReadMe.txt</li></ul></li></ul>
+<h3><span id="edit_.json-File_in_&quot;Cars&quot;-Folder"></span><span id="edit_.json-File_in_.22Cars.22-Folder">edit .json-File in "Cars"-Folder</span></h3>
+<p>First you have the possibility to edit the generated .json file. Go to:
+</p>
+<ul><li>Documents \ Assetto Corsa Competizione \ Customs \ Cars</li>
+<li>there you will find the one .json file named as follows: example: 42-201016-095902.json ( RaceNumber-YYMMDD-time )</li>
+<li>the file name can be changed</li>
+<li>open you .json File</li></ul>
+<table>
+
+<tbody><tr>
+<th>Settings</th>
+<th>InGame<br>Editor</th>
+<th>Description</th>
+<th>Value</th>
+<th>Hints
+</th></tr>
+<tr>
+<td>carGuid</td>
+<td>
+</td></tr>
+<tr>
+<td>teamGuid</td>
+<td>
+</td></tr>
+<tr>
+<td>raceNumber</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>set a favored starting number, from 1 to 998 possible</td>
+<td>1, 2, ..., 998</td>
+<td>
+<ul><li>if a driver with this number is on the server, then you will get the next free number</li>
+<li>Admins have the possibility to assign certain start numbers via an access list</li></ul>
+</td></tr>
+<tr>
+<td>raceNumberPadding</td>
+<td></td>
+<td></td>
+<td>
+<ul><li>1 = one- and two-digit bib numbers are preceded by a 0</li>
+<li>0 = Start number is displayed as entered in "raceNumber"</li></ul>
+</td></tr>
+<tr>
+<td>auxLightKey</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>position of auxiliary LEDs</td>
+<td>
+<ul><li>0 not LED</li>
+<li>1 to 19</li></ul>
+</td>
+<td>
+<ul><li>depending on the vehicle, also less</li>
+<li>depending on the vehicle in different places</li></ul>
+</td></tr>
+<tr>
+<td>auxLightColor</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>Color of auxiliary LED-Lights</td>
+<td><a href="https://www.acc-wiki.info/wiki/Custom_Car#IDs_Tables" title="Custom Car">see here ↓</a>
+</td></tr>
+<tr>
+<td>skinTemplateKey</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>Choose a pattern for the selected vehicle model</td>
+<td><a href="https://www.acc-wiki.info/wiki/Custom_Car#IDs_Tables" title="Custom Car">see here ↓</a></td>
+<td>
+<ul><li>Number 99 gives all-carbon look</li></ul>
+</td></tr>
+<tr>
+<td>skinColor1Id</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>select Base-Color for state coach ( Base Layer )</td>
+<td rowspan="3"><a href="https://www.acc-wiki.info/wiki/Custom_Car#IDs_Tables" title="Custom Car">see here ↓</a>
+</td></tr>
+<tr>
+<td>skinColor2Id</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>select Second-Color for state coach ( Accent )
+</td></tr>
+<tr>
+<td>skinColor3Id</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>select Third-Color for state coach ( Trim )
+</td></tr>
+<tr>
+<td>sponsorId</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>Prefabricated logos of the main sponsors
+</td></tr>
+<tr>
+<td>skinMaterialType1</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>surface finish for main-color ( Base Layer )</td>
+<td rowspan="3">
+<ul><li>0 = Glossy</li>
+<li>1 = Matte</li>
+<li>2 = Satin</li>
+<li>3 = Metallic-Satin</li>
+<li>4 = Metallic</li>
+<li>5 = Chrome</li>
+<li>6 = Clear Chrome</li></ul>
+</td></tr>
+<tr>
+<td>skinMaterialType2</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>surface finish for secound-color ( Accent )
+</td>
+<td>↓<a href="https://www.acc-wiki.info/wiki/Custom_Car#Tables:_IDs_for_Colors_and_Materials" title="Custom Car">Sample image</a>
+</td></tr>
+<tr>
+<td>skinMaterialType3</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>surface finish for secound third-color ( Trim )
+</td></tr>
+<tr>
+<td>rimColor1Id</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>Basic colour for the rims</td>
+<td><a href="https://www.acc-wiki.info/wiki/Custom_Car#IDs_Tables" title="Custom Car">see here ↓</a>
+</td></tr>
+<tr>
+<td>rimColor2Id</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>second color for the rims ( ring )</td>
+<td><a href="https://www.acc-wiki.info/wiki/Custom_Car#IDs_Tables" title="Custom Car">see here ↓</a>
+</td></tr>
+<tr>
+<td>rimMaterialType1</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>surface finish for the base-color of the rims ( Base )</td>
+<td rowspan="2">
+<ul><li>1 = Glossy</li>
+<li>2 = Matte</li>
+<li>3 = Metallic-Satin</li>
+<li>4 = Metallic</li>
+<li>5 = Chrome</li></ul>
+</td></tr>
+<tr>
+<td>rimMaterialType2</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>surface finish for the secound-color of the rims ( Accent )
+</td></tr>
+<tr>
+<td>teamName</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>Enter the name of your team here</td>
+<td></td>
+<td>The name then appears in the team selection.
+</td></tr>
+<tr>
+<td>nationality</td>
+<td></td>
+<td></td>
+<td>0 Other, 49 Andorra, 14 Argentina, 28 Armenia, 50 Azerbaijan, 41 
+Australia,  9 Austria, 79 Bahrain,  7 Belgium, 17 Brazil, 51 Bulgaria, 
+34 Canada, 82 Chile, 35 China, 81 Chinese Taipei, 47 Columbia, 33 
+Croatia, 52 Cuba, 53 Czech Republic, 32 Denmark, 86 England, 54 Estonia,
+ 31 Finland,  3 France, 55 Georgia,  2 Germany,  5 Great Britain, 22 
+Greece, 46 Hong Kong,  6 Hungaria, 56 India, 38 Indonesia, 78 Iran, 16 
+Ireland, 57 Israel,  1 Italy, 58 Jamaica, 48 Japan, 45 Kuwait, 59 
+Latvia, 27 Lebanon, 60 Lithuania, 44 Luxembourg, 61 Macao, 84 
+Madagascar, 62 Malysia, 85 Malta, 29 Mexico, 15 Monaco, 63 Nepal, 12 
+Netherlands, 64 New Caledonia, 40 New Zealand, 65 Nigeria, 66 Northern 
+Ireland, 24 Norway, 21 Oman, 67 Paua New Guinea, 68 Philippines, 13 
+Poland, 36 Portugal, 19 Puerto Rico, 69 Qatar, 70 Rumania, 10 Russia, 42
+ San Marino, 23 Saudi Arabia, 72 Scotland, 72 Serbia, 37 Singapore, 20 
+Slovakia, 73 Slovenia, 18 South Afrika, 26 South Korea,  4 Spain, 30 
+Sweden,  8 Switzerland, 74 Taiwan, 11 Thailand, 25 Turkey, 75 Ukraine, 
+43 United Arab Emirates, 83 Uruguay, 39 USA, 76 Venezuela, 77 Wales, 80 
+Zimbabwe
+</td></tr>
+<tr>
+<td>displayName</td>
+<td>
+</td></tr>
+<tr>
+<td>competitorName</td>
+<td>
+</td></tr>
+<tr>
+<td>competitorNationality</td>
+<td>
+</td></tr>
+<tr>
+<td>teamTemplateKey</td>
+<td>
+</td></tr>
+<tr>
+<td>carModelType</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>ID for the vehicle model</td>
+<td><a href="https://www.acc-wiki.info/wiki/Custom_Car#IDs_Tables" title="Custom Car">see here ↓</a>
+</td></tr>
+<tr>
+<td>cupCategory</td>
+<td><img alt="Green check.webp" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/13px-Green_check.webp.png" data-file-width="13" data-file-height="13" width="13" height="13"></td>
+<td>Driver drives in the Cup category</td>
+<td>
+<ul><li>0 = All</li>
+<li>1 = ProAm</li>
+<li>2 = AM</li>
+<li>3 = Silver</li>
+<li>4 = National</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td>licenseType</td>
+<td>
+</td></tr>
+<tr>
+<td>useEnduranceKit</td>
+<td></td>
+<td>choose:</td>
+<td>
+<ul><li>0 = Normal Bodykit</li>
+<li>1 = Endurance-Bodykit</li></ul>
+</td>
+<td><span>BUG! Endurance-BodyKit is always on</span>
+</td></tr>
+<tr>
+<td>customSkinName</td>
+<td>
+</td></tr>
+<tr>
+<td>bannerTemplateKey</td>
+<td>
+</td></tr></tbody></table>
+<h3></h3>
+<ul><li>Now you can look around for templates for the vehicles, I found the following:
+<ul><li>schwarzbierbude - SBB Templates: <a rel="nofollow" href="http://www.schwarzbierbude.de/component/option,com_remository/Itemid,26/func,select/id,160/lang,de/">Downloads &gt; ACC Car Templates</a></li>
+<li><a rel="nofollow" href="https://www.racedepartment.com/downloads/acc-gt4-templates-part-1.34995/">https://www.racedepartment.com/downloads/acc-gt4-templates-part-1.34995/</a></li>
+<li><a rel="nofollow" href="https://www.racedepartment.com/downloads/acc-gt4-templates-part-2-1-0.35014/">https://www.racedepartment.com/downloads/acc-gt4-templates-part-2-1-0.35014/</a></li></ul></li>
+<li>you use these to draw your design and export it to your folder as a PNG file format</li></ul>
+<h3></h3>
+<p>The material properties can be changed using the files <b>decals.json</b> or <b>sponsors.json</b> 
+</p><p>Here is a list of presets that you can use to get the same materials as in ACC in game livery editor.
+</p><p><b>Glossy:</b>
+</p>
+<pre>   "baseRoughness": 0,
+   "clearCoat": 1,
+   "clearCoatRoughness": 0,
+   "metallic": 0
+</pre>
+<p><b>Matte:</b>
+</p>
+<pre>   "baseRoughness": 0.45,
+   "clearCoat": 0.3,
+   "clearCoatRoughness": 0.6,
+   "metallic": 0
+</pre>
+<p><b>Satin:</b>
+</p>
+<pre>   "baseRoughness": 0.45,
+   "clearCoat": 0.1,
+   "clearCoatRoughness": 0.3,
+   "metallic": 0
+</pre>
+<p><b>Satin Metallic:</b>
+</p>
+<pre>   "baseRoughness": 0.3,
+   "clearCoat": 0.5,
+   "clearCoatRoughness": 0.3,
+   "metallic": 0.7
+</pre>
+<p><b>Metallic:</b>
+</p>
+<pre>   "baseRoughness": 0,
+   "clearCoat": 1,
+   "clearCoatRoughness": 0,
+   "metallic": 0.625
+</pre>
+<p><b>Chrome:</b>
+</p>
+<pre>   "baseRoughness": 0,
+   "clearCoat": 1,
+   "clearCoatRoughness": 0,
+   "metallic": 0.9
+</pre>
+<h3></h3>
+<p>While working on your project, you should prevent the DDS files 
+automatically generated by the game from being generated. Because with 
+every change to the PNG file, the dds files must first be deleted in 
+order to be able to see the changes in the game. In addition, the 
+generation process takes several seconds, depending on the resolution of
+ the PNG file. <i>( 2K fast / 4K over 1 second / 8K several seconds )</i>
+</p>
+<ul><li>go to File menuSettings.json: Documents \ Assetto Corsa Competizione \ Config</li>
+<li>search to ”texDDS”: 1,</li>
+<li>change value 1 to 0 <i>( change only if ACC is not running )</i></li></ul>
+<h2><span id="Team_editing_in_Game">Team editing in Game</span></h2>
+<p>you can get there on the following paths in the game:
+</p>
+<ul><li>Driver Profile / Costumize</li></ul>
+<p>If you want to edit outside of the game, go to:
+</p>
+<ul><li>C: \ Users \ ***username*** \ Documents \ Assetto Corsa Competizione \ Customs\Drivers</li>
+<li>You can find the description here: <a href="https://www.acc-wiki.info/wiki/Custom_Car#Text-Editor:_Team" title="Custom Car">Text-Editor: Team</a></li></ul>
+<p><a href="https://www.acc-wiki.info/wiki/File:Customization.png"><img alt="Customization.png" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/750px-Customization.png" data-file-width="2560" data-file-height="1440" class="moz-reader-block-img" width="750" height="422"></a>
+</p><p>your find .json-Files here: C:\Users\***username***\Documents\Assetto Corsa Competizione\Customs\Drivers
+</p>
+<h3><span id="driver1.json,_driver2.json,_driver3.json"></span><span id="driver1.json.2C_driver2.json.2C_driver3.json">driver1.json, driver2.json, driver3.json</span></h3>
+<table>
+
+<tbody><tr>
+<th>File Content</th>
+<th>Settings</th>
+<th>Description
+</th></tr>
+<tr>
+<td rowspan="40">
+<p><span>{</span><br>
+"firstName": "First",<br>
+"lastName": "Teammate",<br>
+"shortName": "FTM",<br>
+"nationality": 2,<br>
+"driverCategory": 2,<br>
+"helmetTemplateKey": 508,<br>
+"helmetBaseColor": 531,<br>
+"helmetDetailColor": 521,<br>
+"helmetMaterialType": 1,<br>
+"helmetGlassColor": 7,<br>
+"helmetGlassMetallic": 0.0,<br>
+"glovesTemplateKey": 12,<br>
+"suitTemplateKey": 503,<br>
+"suitDetailColor1": 350,<br>
+"suitDetailColor2": 531,<br>
+"playerID": "0",<br>
+"aiSkill": 100,<br>
+"aiAggro": 50,<br>
+"aiRainSkill": 50,<br>
+"aiConsistency": 50<br>
+<span>}</span>
+</p>
+</td></tr>
+<tr>
+<td>firstName</td>
+<td>
+</td></tr>
+<tr>
+<td>lastName</td>
+<td>
+</td></tr>
+<tr>
+<td>shortName</td>
+<td>
+</td></tr>
+<tr>
+<td>nationality</td>
+<td>
+</td></tr>
+<tr>
+<td>driverCategory</td>
+<td>
+</td></tr>
+<tr>
+<td>helmetTemplateKey</td>
+<td>
+</td></tr>
+<tr>
+<td>helmetBaseColor</td>
+<td>
+</td></tr>
+<tr>
+<td>helmetDetailColor</td>
+<td>
+</td></tr>
+<tr>
+<td>helmetMaterialType</td>
+<td>
+</td></tr>
+<tr>
+<td>helmetGlassColor</td>
+<td>
+</td></tr>
+<tr>
+<td>helmetGlassMetallic</td>
+<td>
+</td></tr>
+<tr>
+<td>glovesTemplateKey</td>
+<td>
+</td></tr>
+<tr>
+<td>suitTemplateKey</td>
+<td>
+</td></tr>
+<tr>
+<td>suitDetailColor1</td>
+<td>
+</td></tr>
+<tr>
+<td>suitDetailColor2</td>
+<td>
+</td></tr>
+<tr>
+<td>playerID</td>
+<td>
+</td></tr>
+<tr>
+<td>aiSkill</td>
+<td>
+</td></tr>
+<tr>
+<td>aiAggro</td>
+<td>
+</td></tr>
+<tr>
+<td>aiRainSkill</td>
+<td>
+</td></tr>
+<tr>
+<td>aiConsistency</td>
+<td>
+</td></tr></tbody></table>
+<h2><span id="IDs_Tables">IDs Tables</span></h2>
+<table>
+
+<thead><tr>
+<th tabindex="0" role="columnheader button" title="Sort ascending">Car</th>
+<th tabindex="0" role="columnheader button" title="Sort ascending">carModelType</th>
+<th tabindex="0" role="columnheader button" title="Sort ascending">skinTemplateKey</th>
+<th tabindex="0" role="columnheader button" title="Sort ascending">auxLightKey</th>
+<th tabindex="0" role="columnheader button" title="Sort ascending">sponsorId
+</th></tr></thead><tbody>
+<tr>
+<td><b>Alpine A110 GT4</b></td>
+<td>50</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Aston Martin Vantage V12 GT3</b></td>
+<td>12</td>
+<td>100, 101, 102</td>
+<td>1 - 2
+</td></tr>
+<tr>
+<td><b>Aston Martin Vantage V8 2019</b></td>
+<td>20</td>
+<td>100, 101, 102, 103, 104, 105, 106</td>
+<td>1 - 4
+</td></tr>
+<tr>
+<td><b>Aston Martin Vantage GT4</b></td>
+<td>51</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Audi R8 GT3 2015</b></td>
+<td>3</td>
+<td>100, 101, 102, 103</td>
+<td>1 - 9
+</td></tr>
+<tr>
+<td><b>Audi R8 LMS Evo 2019</b></td>
+<td>19</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 10
+</td></tr>
+<tr>
+<td><b>Audi R8 LMS Evo2 2022</b></td>
+<td>31</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td><b>Audi R8 LMS GT4</b></td>
+<td>52</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Bentley Continental GT3 2015</b></td>
+<td>11</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 3
+</td></tr>
+<tr>
+<td><b>Bentley Continental GT3 2018</b></td>
+<td>8</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>BMW M2 Club Sport Racing</b></td>
+<td>27</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td><b>BMW M4 GT4</b></td>
+<td>53</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>BMW M4 GT3</b></td>
+<td>30</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td><b>BMW M6 GT3</b></td>
+<td>7</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 3
+</td></tr>
+<tr>
+<td><b>Chevrolet Camaro GT4</b></td>
+<td>55</td>
+<td>100, 101, 102, 103</td>
+<td>1 - 2
+</td></tr>
+<tr>
+<td><b>Emil Frey Jaguar G3</b></td>
+<td>14</td>
+<td>100</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Ferrari 488 Challenger Evo</b></td>
+<td>26</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td><b>Ferrari 488 GT3</b></td>
+<td>2</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 9
+</td></tr>
+<tr>
+<td><b>Ferrari 488 GT3 Evo</b></td>
+<td>24</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 10
+</td></tr>
+<tr>
+<td><b>Ginetta G55 GT4</b></td>
+<td>56</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Honda NSX GT3</b></td>
+<td>17</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 6
+</td></tr>
+<tr>
+<td><b>Honda NSX Evo 2019</b></td>
+<td>21</td>
+<td>100, 101, 102</td>
+<td>1 - 6
+</td></tr>
+<tr>
+<td><b>KTM X-Bow GT4</b></td>
+<td>57</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Lamborghini Gallardo R-EX</b></td>
+<td>13</td>
+<td>100, 101, 102</td>
+<td>no LEDs
+</td></tr>
+<tr>
+<td><b>Lamborghini Huracan GT3</b></td>
+<td>4</td>
+<td>100, 101, 102</td>
+<td>1 - 9
+</td></tr>
+<tr>
+<td><b>Lamborghini Huracan Evo 2019</b></td>
+<td>16</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 11
+</td></tr>
+<tr>
+<td><b>Lamborghini Huracan SuperTrofeo</b></td>
+<td>18</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 6
+</td></tr>
+<tr>
+<td><b>Lamborghini Huracan SuperTrofeo Evo2</b></td>
+<td>29</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td><b>Lexus RC F GT3</b></td>
+<td>15</td>
+<td>100, 101</td>
+<td>1 - 2
+</td></tr>
+<tr>
+<td><b>Maserati MC GT4</b></td>
+<td>58</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>McLaren 570S GT4</b></td>
+<td>59</td>
+<td>100</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>McLaren 650s GT3</b></td>
+<td>5</td>
+<td>100, 101</td>
+<td>1 - 2
+</td></tr>
+<tr>
+<td><b>McLaren 720S GT3 Special</b></td>
+<td>22</td>
+<td>100</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Mercedes AMG GT3</b></td>
+<td>1</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 17
+</td></tr>
+<tr>
+<td><b>Mercedes AMG GT3 2020</b></td>
+<td>25</td>
+<td>100, 101, 102, 103, 104</td>
+<td>4 - 19
+</td></tr>
+<tr>
+<td><b>Mercedes AMG GT4</b></td>
+<td>60</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 3
+</td></tr>
+<tr>
+<td><b>Nissan GT-R Nismo GT3 2015</b></td>
+<td>10</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Nissan GT-R Nismo GT3 2018</b></td>
+<td>6</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 4
+</td></tr>
+<tr>
+<td><b>Porsche 718 Cayman GT4</b></td>
+<td>61</td>
+<td>100, 101, 102, 103</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Porsche 991 GT3</b></td>
+<td>0</td>
+<td>100, 101, 102, 103, 104</td>
+<td>1 - 3
+</td></tr>
+<tr>
+<td><b>Porsche 991 II GT3 Cup</b></td>
+<td>9</td>
+<td>100, 101, 102, 103, 104, 105, 106, 107, 108, 109</td>
+<td>1
+</td></tr>
+<tr>
+<td><b>Porsche 991 II GT3 R 2019</b></td>
+<td>23</td>
+<td>100, 101, 102, 103, 104, 105</td>
+<td>1 - 3
+</td></tr>
+<tr>
+<td><b>Porsche 992 GT3 Cup</b></td>
+<td>28</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>?</td>
+<td>54</td>
+<td>?</td>
+<td>?
+</td></tr></tbody><tfoot></tfoot></table>
+<p>Fanatec, Thrustmaster, Logitech, Nvidia, Sparco Gaming, rseat, AK Informatica, Assetto Corsa Competizione
+</p><p><code>"skinColor1Id":&nbsp;;  skinColor2Id":&nbsp;; skinColor3Id":&nbsp;; "rimColor1Id":&nbsp;; "rimColor2Id":&nbsp;;<br>
+"skinMaterialType1":&nbsp;; "skinMaterialType2":&nbsp;; 
+"skinMaterialType3":&nbsp;; "rimMaterialType1":&nbsp;; 
+"rimMaterialType2":&nbsp;;<br>
+"auxLightColor":&nbsp;;</code>
+</p><p><a href="https://www.acc-wiki.info/images/f/fa/Farben.png" rel="nofollow"><img alt="Farben.png" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/1200px-Farben.png" data-file-width="2284" data-file-height="843" class="moz-reader-block-img" moz-reader-center="true" width="1200" height="443"></a>
+</p>
+<table>
+
+<tbody><tr>
+<th>Color ID</th>
+<th>Material ID 0</th>
+<th>Material ID 1</th>
+<th>Material ID 2</th>
+<th>Material ID 3</th>
+<th>Material ID 4</th>
+<th>Material ID 5</th>
+<th>Material ID 6
+</th></tr>
+<tr>
+<th></th>
+<th>glossy</th>
+<th>matte</th>
+<th>satin</th>
+<th>satin-metallic</th>
+<th>Metallic</th>
+<th>chrome</th>
+<th>clear-chrome
+</th></tr>
+<tr>
+<td><b>0</b></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:0_0.jpg" title="0_0"><img alt="0_0" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/0_0.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:0_1.jpg" title="0_1"><img alt="0_1" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/0_1.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:0_2.jpg" title="0_2"><img alt="0_2" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/0_2.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:0_3.jpg" title="0_3"><img alt="0_3" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/0_3.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:0_4.jpg" title="0_4"><img alt="0_4" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/0_4.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:0_5.jpg" title="0_5"><img alt="0_5" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/0_5.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:0_6.jpg" title="0_6"><img alt="0_6" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/0_6.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a>
+</td></tr>
+<tr>
+<td><b>41</b></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:41_0.jpg" title="0_0"><img alt="0_0" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/41_0.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:41_1.jpg" title="41_1"><img alt="41_1" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/41_1.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:41_2.jpg" title="0_2"><img alt="0_2" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/41_2.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:41_3.jpg" title="0_3"><img alt="0_3" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/41_3.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:41_4.jpg" title="0_4"><img alt="0_4" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/41_4.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:41_5.jpg" title="0_5"><img alt="0_5" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/41_5.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:41_6.jpg" title="0_6"><img alt="0_6" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/41_6.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a>
+</td></tr>
+<tr>
+<td><b>150</b></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:150_0.jpg" title="150_0"><img alt="150_0" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/150_0.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:150_1.jpg" title="150_1"><img alt="150_1" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/150_1.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:150_2.jpg" title="150_2"><img alt="150_2" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/150_2.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:150_3.jpg" title="150_3"><img alt="150_3" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/150_3.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:150_4.jpg" title="150_4"><img alt="150_4" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/150_4.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:150_5.jpg" title="150_5"><img alt="150_5" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/150_5.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:150_6.jpg" title="150_6"><img alt="150_6" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/150_6.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a>
+</td></tr>
+<tr>
+<td><b>223</b></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:223_0.jpg" title="223_0"><img alt="223_0" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/223_0.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:223_1.jpg" title="223_1"><img alt="223_1" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/223_1.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:223_2.jpg" title="223_2"><img alt="223_2" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/223_2.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:223_3.jpg" title="223_3"><img alt="223_3" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/223_3.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:223_4.jpg" title="223_4"><img alt="223_4" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/223_4.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:223_5.jpg" title="223_5"><img alt="223_5" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/223_5.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:223_6.jpg" title="223_6"><img alt="223_6" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/223_6.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a>
+</td></tr>
+<tr>
+<td><b>285</b></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:241_0.jpg" title="241_0"><img alt="241_0" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/241_0.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:241_1.jpg" title="241_1"><img alt="241_1" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/241_1.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:241_2.jpg" title="241_2"><img alt="241_2" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/241_2.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:241_3.jpg" title="241_3"><img alt="241_3" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/241_3.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:241_4.jpg" title="241_4"><img alt="241_4" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/241_4.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:241_5.jpg" title="241_5"><img alt="241_5" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/241_5.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:241_6.jpg" title="241_6"><img alt="241_6" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/241_6.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a>
+</td></tr>
+<tr>
+<td><b>285</b></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:285_0.jpg" title="285_0"><img alt="285_0" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/285_0.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:285_1.jpg" title="285_1"><img alt="285_1" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/285_1.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:285_2.jpg" title="285_2"><img alt="285_2" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/285_2.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:285_3.jpg" title="285_3"><img alt="285_3" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/285_3.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:285_4.jpg" title="285_4"><img alt="285_4" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/285_4.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:285_5.jpg" title="285_5"><img alt="285_5" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/285_5.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:285_6.jpg" title="285_6"><img alt="285_6" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/285_6.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a>
+</td></tr>
+<tr>
+<td><b>338</b></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:338_0.jpg" title="338_0"><img alt="338_0" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/338_0.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:338_1.jpg" title="338_1"><img alt="338_1" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/338_1.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:338_2.jpg" title="338_2"><img alt="338_2" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/338_2.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:338_3.jpg" title="338_3"><img alt="338_3" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/338_3.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:338_4.jpg" title="338_4"><img alt="338_4" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/338_4.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:338_5.jpg" title="338_5"><img alt="338_5" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/338_5.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a></td>
+<td><a href="https://www.acc-wiki.info/wiki/File:338_6.jpg" title="338_6"><img alt="338_6" src="Custom%20Car%20-%20ACC%20Wiki%20(Unofficial)_files/338_6.jpg" data-file-width="80" data-file-height="80" width="80" height="80"></a>
+</td></tr></tbody></table>
+
+
+
+
+
+</div></div></div>
+      </div>
+
+      <div>
+        <div class="reader-message"></div>
+      </div>
+      <div aria-owns="toolbar"></div>
+    </div>
+
+    <div id="pocket-cta-container" hidden="">
+      <div class="pocket-cta-inner" id="pocket-cta-only">
+        <div class="pocket-cta">
+          <header class="pocket-cta-header">
+            Save anything from across the web in Pocket, your personal library.
+          </header>
+          <p class="pocket-cta-subhead">
+            As part of the Firefox family, Pocket provides a quiet, calm space
+            that’s perfect for reading. It strips away all the distractions of
+            the internet so you can really focus.
+          </p>
+          <a href="https://getpocket.com/signup?utm_source=firefox_reader&amp;utm_medium=variant_cta_only" class="pocket-btn pocket-sign-up"><strong>Sign up</strong> - it’s free</a>
+          <a href="https://getpocket.com/explore?utm_source=firefox_reader&amp;utm_medium=variant_cta_only" class="pocket-btn pocket-discover-more"><strong>Discover more</strong></a>
+        </div>
+        <button class="pocket-dismiss-cta" title="Dismiss"></button>
+      </div>
+
+      <div class="pocket-cta-inner" id="pocket-cta-and-recs">
+        <div class="pocket-recs-top">
+          <div class="col">
+            <header class="pocket-cta-header">
+              Discover the most thought-provoking stories out there, curated by
+              Pocket.
+            </header>
+            <p class="pocket-cta-subhead">
+              As part of the Firefox family, Pocket surfaces the best articles
+              out there—new perspectives, intriguing deep-dives, timeless
+              classics—and we do this with the same dedication to privacy you’ve
+              come to expect from Firefox and Mozilla.
+            </p>
+          </div>
+          <div class="col">
+            <button class="pocket-collapse-recs"></button>
+          </div>
+        </div>
+
+        <div class="pocket-recs"></div>
+
+        <div class="pocket-sign-up-wrapper">
+          <a href="https://getpocket.com/explore?utm_source=firefox_reader&amp;utm_medium=variant_cta_plus_recs" class="pocket-btn pocket-sign-up"><strong>Discover more</strong></a>
+        </div>
+      </div>
+    </div>
+  
+
+</body></html>
