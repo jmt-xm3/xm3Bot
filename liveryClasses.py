@@ -31,6 +31,8 @@ class ACCLivery:
         self.DazzleTopColour = (208, 42, 64)
         self.DazzleBottomColour = (74, 73, 135)
         self.zipPath = ''
+    
+    
     # Getter methods
 
     def setFolderName(self, folderName):

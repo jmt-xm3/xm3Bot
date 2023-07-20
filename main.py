@@ -1,5 +1,21 @@
+import random
+from discord.ext import commands
+import discord
 import os
 import shutil
+
+from liveryClasses import accCarModels, ACCLivery
+
+
+cars = [{'key': 'AMR V12 Vantage GT3', 'value': 12}, {'key': 'AMR V8 Vantage', 'value': 20}, {'key': 'Audi R8 LMS Evo', 'value': 19}, {'key': 'Audi R8 LMS GT3 Evo 2', 'value': 31}, {'key': 'Audi R8 LMS', 'value': 3}, {'key': 'BMW M4 GT3', 'value': 30}, {'key': 'BMW M6 GT3', 'value': 7}, {'key': 'Bentley Continental GT3 2015', 'value': 11}, {'key': 'Bentley Continental GT3 2018', 'value': 8}, {'key': 'Emil Frey Jaguar G3', 'value': 14}, {'key': 'Ferrari 296 GT3', 'value': 32}, {'key': 'Ferrari 488 GT3 Evo', 'value': 24}, {'key': 'Ferrari 488 GT3', 'value': 2}, {'key': 'Honda NSX GT3 Evo', 'value': 21}, {'key': 'Honda NSX GT3', 'value': 17}, {
+    'key': 'Lamborghini Huracán GT3 Evo', 'value': 16}, {'key': 'Lamborghini Huracán GT3 EVO2', 'value': 33}, {'key': 'Lamborghini Huracán GT3', 'value': 4}, {'key': 'Lexus RC F GT3', 'value': 15}, {'key': 'McLaren 650S GT3', 'value': 5}, {'key': 'McLaren 720S GT3', 'value': 22}, {'key': 'McLaren 720S GT3 EVO', 'value': 35}, {'key': 'Mercedes-AMG GT3', 'value': 1}, {'key': 'Mercedes-AMG GT3 Evo', 'value': 25}, {'key': 'Nissan GT-R Nismo GT3 2015', 'value': 10}, {'key': 'Nissan GT-R Nismo GT3 2018', 'value': 6}, {'key': 'Porsche 991 GT3 R', 'value': 0}, {'key': 'Porsche 991 II GT3 R', 'value': 23}, {'key': 'Porsche 992 GT3 R', 'value': 34}, {'key': 'Reiter Engineering R-EX GT3', 'value': 13}]
+available = []
+for model in accCarModels:
+    available.append(model['carModelType'])
+
+for car in cars:
+    if car['value'] not in available:
+        cars.remove(car)
 
 
 currentDirectory = os.getcwd()
@@ -11,12 +27,7 @@ def clearTempDirectory():
     os.mkdir("temp")
 
 
-
 # This example requires the 'members' and 'message_content' privileged intents to function.
-
-import discord
-from discord.ext import commands
-import random
 
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
@@ -27,7 +38,8 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-bot = commands.Bot(command_prefix='xm3', description=description, intents=intents)
+bot = commands.Bot(command_prefix='xm3',
+                   description=description, intents=intents)
 
 
 @bot.event
@@ -67,8 +79,10 @@ async def repeat(ctx, times: int, content='repeating...'):
     for i in range(times):
         await ctx.send(content)
 
+
 @bot.command()
 async def die(ctx):
+    await ctx.send('zamn')
     quit()
 
 
@@ -78,17 +92,52 @@ async def joined(ctx, member: discord.Member):
     await ctx.send(f'{member.name} joined {discord.utils.format_dt(member.joined_at)}')
 
 
-@bot.group()
-async def create(ctx, carName: str):
-    """Says if a user is cool.
 
-    In reality this just checks if a subcommand is being invoked.
-    """
-    if ctx.invoked_subcommand is None:
-        await ctx.send(f'No, {carName} is not cool')
+class carDropdown(discord.ui.Select):
+    def __init__(self):
+        options = []
+        self.carModel = 0
+        for car in cars:
+            options.append(discord.SelectOption(label=car["key"], description='Select this for a '+car['key']+' livery.', emoji='🏎️'))
 
-    
+        # The placeholder is what will be shown when no option is chosen
+        # The min and max values indicate we can only pick one of the three options
+        # The options parameter defines the dropdown options. We defined this above
+        super().__init__(placeholder='Choose a car', min_values=1, max_values=1, options=options)
+
+    async def callback(self, interaction: discord.Interaction):
+        # Use the interaction object to send a response message containing
+        # the user's favourite colour or choice. The self object refers to the
+        # Select object, and the values attribute gets a list of the user's
+        # selected options. We only want the first one.
+        await interaction.response.send_message(f'You selected the {self.values[0]}')
+        for car in cars:
+            if car['key'] == self.values[0]:
+                self.carModel = car['value']
+                break
 
 
+class carDropdownView(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+        dropdown = carDropdown()
+        self.add_item(dropdown)
+        self.CMT = dropdown.carModel
+        print(self.CMT)
+        
+        
 
-bot.run('MTEyOTE5MDk3MTc5NjYzNTY0OA.GRSyl9.HIHgEWFNQ-VTt1MiyRYZDF41iutxWUAussL-So') 
+@bot.command()
+async def newLivery(ctx):
+    """Sends a message with our dropdown containing colours"""
+    newCarLivery = ACCLivery()
+    # Create the view containing our dropdown
+    view = carDropdownView()
+
+    # Sending a message containing our view
+    await ctx.send('Pick the car for your new livery:', view=view)
+    newCarLivery.setCarModelType(view.CMT)
+    print('car model type is ', newCarLivery.getCarModelType())
+
+
+bot.run('MTEyOTE5MDk3MTc5NjYzNTY0OA.GRSyl9.HIHgEWFNQ-VTt1MiyRYZDF41iutxWUAussL-So')
