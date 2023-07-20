@@ -67,6 +67,10 @@ async def repeat(ctx, times: int, content='repeating...'):
     for i in range(times):
         await ctx.send(content)
 
+@bot.command()
+async def die(ctx):
+    quit()
+
 
 @bot.command()
 async def joined(ctx, member: discord.Member):
@@ -75,14 +79,15 @@ async def joined(ctx, member: discord.Member):
 
 
 @bot.group()
-async def cool(ctx):
+async def create(ctx, carName: str):
     """Says if a user is cool.
 
     In reality this just checks if a subcommand is being invoked.
     """
     if ctx.invoked_subcommand is None:
-        await ctx.send(f'No, {ctx.subcommand_passed} is not cool')
+        await ctx.send(f'No, {carName} is not cool')
 
+    
 
 
 
