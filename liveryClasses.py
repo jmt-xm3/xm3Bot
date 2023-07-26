@@ -222,8 +222,6 @@ class ACCLivery:
         
         
     def zipCar(self):
-        self.createDazzle()
-        self.createJsonFile()
         self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID))
         tempDirectory = os.path.join(currentDirectory,'temp')
         os.chdir(tempDirectory)
