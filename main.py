@@ -7,6 +7,12 @@ from liveryClasses import accCarModels, ACCLivery
 from discord.ext import commands
 
 
+with open('token.txt','r') as f:
+    token = f.read()
+    
+
+currentDirectory = os.getcwd()
+tempDirectory = os.path.join(currentDirectory, 'temp')
 newCarLivery = ACCLivery()
 startTime = datetime.datetime.now()
 materials = [{'key': 'Glossy', 'value': 0}, {'key': 'Matte', 'value': 1}, {'key': 'Satin', 'value': 2}, {
@@ -20,178 +26,32 @@ for model in accCarModels:
 for car in cars:
     if car['value'] not in available:
         cars.remove(car)
-
-
-currentDirectory = os.getcwd()
-tempDirectory = os.path.join(currentDirectory, 'temp')
-
-
+        
+        
 def clearTempDirectory():
     shutil.rmtree(tempDirectory)
     os.mkdir("temp")
 
 
-# This example requires the 'members' and 'message_content' privileged intents to function.
-
-description = '''An example bot to showcase the discord.ext.commands extension
-module.
-
-There are a number of utility commands being showcased here.'''
-
-intents = discord.Intents.default()
-intents.members = True
-intents.message_content = True
-bot = commands.Bot(command_prefix='xm3',
-                   description=description, intents=intents)
-
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
-    print('------')
+    print('hello  world')
+    try:
+        synced = await bot.tree.sync()
+        print(f'Synced {len(synced)} synced')
+    except Exception as e:
+        print(e)
+
+@bot.tree.command(name='xm3time')
+async def xm3TIme(interaction:discord.Interaction):
+    await interaction.response.send_message(f"{startTime} innit")
+    
+@bot.tree.command(name="revsport")
+@discord.app_commands.describe(car="figure out later")
+async def revsport(interaction:discord.Interaction, car:str):
+    await interaction.response.send_message(f"{interaction.user.name} wants: {str}")
 
 
-@bot.command()
-async def uptime(ctx):
-    currentTime = datetime.datetime.now()
-    difference = (currentTime - startTime).total_seconds() / 60
-    await ctx.send(f'This bot has been running for {difference} minutes since {str(startTime)}')
-
-
-@bot.command()
-async def repeat(ctx, times: int, content='repeating...'):
-    """Repeats a message multiple times."""
-    for i in range(times):
-        await ctx.send(content)
-
-
-@bot.command()
-async def die(ctx):
-    await ctx.send('zamn')
-    quit()
-
-
-class carDropdown(discord.ui.Select):
-    def __init__(self):
-        options = []
-        for car in cars:
-            options.append(discord.SelectOption(
-                label=car["key"], description='Select this for a '+car['key']+' livery.', emoji='🏎️'))
-
-        # The placeholder is what will be shown when no option is chosen
-        # The min and max values indicate we can only pick one of the three options
-        # The options parameter defines the dropdown options. We defined this above
-        super().__init__(placeholder='Choose a car',
-                         min_values=1, max_values=1, options=options)
-
-    async def callback(self, interaction: discord.Interaction):
-        # Use the interaction object to send a response message containing
-        # the user's favourite colour or choice. The self object refers to the
-        # Select object, and the values attribute gets a list of the user's
-        # selected options. We only want the first one.
-        await interaction.response.send_message(f'You selected the {self.values[0]}')
-        for car in cars:
-            if car['key'] == self.values[0]:
-                newCarLivery.setCarModelType(car['value'])
-                break
-
-
-class carDropdownView(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-        dropdown = carDropdown()
-        self.add_item(dropdown)
-        baseMat = baseMatDropdown()
-        self.add_item(baseMat)
-
-
-class baseMatDropdown(discord.ui.Select):
-    def __init__(self):
-        options = []
-        for mat in materials:
-            options.append(discord.SelectOption(
-                label=mat["key"], description='Select this for a '+mat['key']+' base.', emoji='🎨'))
-
-        # The placeholder is what will be shown when no option is chosen
-        # The min and max values indicate we can only pick one of the three options
-        # The options parameter defines the dropdown options. We defined this above
-        super().__init__(placeholder='Choose a base material',
-                         min_values=1, max_values=1, options=options)
-
-    async def callback(self, interaction: discord.Interaction):
-        # Use the interaction object to send a response message containing
-        # the user's favourite colour or choice. The self object refers to the
-        # Select object, and the values attribute gets a list of the user's
-        # selected options. We only want the first one.
-        await interaction.response.send_message(f'You selected a {self.values[0]} finish')
-        for car in cars:
-            if car['key'] == self.values[0]:
-                newCarLivery.setBaseMaterialId(car['value'])
-                break
-
-
-
-
-@bot.command()
-async def Car(ctx):
-    carView = carDropdownView()
-    # Sending a message containing our view
-    await ctx.send('Pick the car for your new livery:', view=carView)
-
-class Dropdown(discord.ui.Select):
-    def __init__(self):
-
-        # Set the options that will be presented inside the dropdown
-        options = [
-            discord.SelectOption(label='Red', description='Your favourite colour is red', emoji='🟥'),
-            discord.SelectOption(label='Green', description='Your favourite colour is green', emoji='🟩'),
-            discord.SelectOption(label='Blue', description='Your favourite colour is blue', emoji='🟦'),
-        ]
-
-        # The placeholder is what will be shown when no option is chosen
-        # The min and max values indicate we can only pick one of the three options
-        # The options parameter defines the dropdown options. We defined this above
-        super().__init__(placeholder='Choose your favourite colour...', min_values=1, max_values=1, options=options)
-
-    async def callback(self, interaction: discord.Interaction):
-        # Use the interaction object to send a response message containing
-        # the user's favourite colour or choice. The self object refers to the
-        # Select object, and the values attribute gets a list of the user's
-        # selected options. We only want the first one.
-        await interaction.response.send_message(f'Your favourite colour is {self.values[0]}')
-
-
-class DropdownView(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-
-        # Adds the dropdown to our view object.
-        self.add_item(Dropdown())
-        self.add_item(Dropdown())
-
-
-class Bot(commands.Bot):
-    def __init__(self):
-        intents = discord.Intents.default()
-        intents.message_content = True
-
-        super().__init__(command_prefix=commands.when_mentioned_or('$'), intents=intents)
-
-    async def on_ready(self):
-        print(f'Logged in as {self.user} (ID: {self.user.id})')
-        print('------')
-
-
-
-@bot.command()
-async def colour(ctx):
-    """Sends a message with our dropdown containing colours"""
-
-    # Create the view containing our dropdown
-    view = DropdownView()
-
-    # Sending a message containing our view
-    await ctx.send('Pick your favourite colour:', view=view)
-
-
-bot.run('MTEyOTE5MDk3MTc5NjYzNTY0OA.GRSyl9.HIHgEWFNQ-VTt1MiyRYZDF41iutxWUAussL-So')
+bot.run(token)
