@@ -72,6 +72,7 @@ async def xm3sync(interaction: discord.Interaction):
 @bot.tree.command(name="xm3die")
 async def xm3die(interaction: discord.Interaction):
         await interaction.response.send_message("zamn")
+        print('rip bot')
         quit()
 
 
@@ -117,12 +118,12 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
     car1.setFolderName(car1.liveryID)
     car1.setInGameName(car1.liveryID)
     car1.setRaceNumber(race_number)
-    await interaction.response.edit_message(f'We are just painting your new livery')
+    await interaction.response.edit_message(content='We are just painting your new livery')
     car1.createDazzle()
     car1.createJsonFile()
-    await interaction.response.edit_message(f'We are just wrapping up your new livery')
+    await interaction.response.edit_message(content='We are just wrapping up your new livery')
     car1.zipCar()
     print(car1.getZipPath())
-    await interaction.response.edit_message(f'Here is your new {car.value} livery',file=discord.File(car1.getZipPath()))
+    await interaction.response.edit_message(content=f'Here is your new {car.value} livery',attachments=discord.File(car1.getZipPath()))
 
 bot.run(token)
