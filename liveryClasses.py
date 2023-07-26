@@ -28,8 +28,8 @@ class ACCLivery:
         self.rimTapeColour = 1
         self.rimTapeMaterialId = 0
         self.raceNumber = 000
-        self.DazzleTopColour = (208, 42, 64)
-        self.DazzleBottomColour = (74, 73, 135)
+        self.DazzleTopColour = (255, 255, 255)
+        self.DazzleBottomColour = (255, 255, 255)
         self.zipPath = ''
     
     
@@ -222,6 +222,8 @@ class ACCLivery:
         
         
     def zipCar(self):
+        self.createDazzle()
+        self.createJson()
         self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID))
         tempDirectory = os.path.join(currentDirectory,'temp')
         os.chdir(tempDirectory)
