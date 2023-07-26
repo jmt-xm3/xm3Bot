@@ -59,8 +59,7 @@ async def on_ready():
 async def xm3time(interaction: discord.Interaction):
     await interaction.response.send_message(f"{startTime} innit")
 
-
-@bot.tree.command(name='xm3sync')
+@bot.tree.command(name="xm3sync")
 async def xm3sync(interaction: discord.Interaction):
         try:
             synced = await bot.tree.sync()
@@ -71,7 +70,7 @@ async def xm3sync(interaction: discord.Interaction):
 
 
 @bot.tree.command(name="xm3die")
-async def xm3TIme(interaction: discord.Interaction):
+async def xm3die(interaction: discord.Interaction):
         await interaction.response.send_message("zamn")
         quit()
 
@@ -118,8 +117,9 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
     car1.setFolderName(car1.liveryID)
     car1.setInGameName(car1.liveryID)
     car1.setRaceNumber(race_number)
+    interaction.reponse.send_message(f'We are making your new livery',ephemeral=True)
     car1.zipCar()
-
+    print(car1.getZipPath())
     await interaction.response.send_message(f'Here is your new {car.value} livery',file=discord.File(car1.getZipPath()))
 
 bot.run(token)
