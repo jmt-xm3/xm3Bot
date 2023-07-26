@@ -1,4 +1,4 @@
-import random
+import asyncio
 import discord
 import os
 import shutil
@@ -47,7 +47,6 @@ def clearTempDirectory():
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
 
-@bot.event
 async def on_ready():
     print('hello  world')
     try:
@@ -72,14 +71,14 @@ async def xm3sync(interaction: discord.Interaction):
         print(e)
 
 
-@bot.tree.command(name='xm3die')
+@bot.tree.command(name="xm3die")
 async def xm3TIme(interaction: discord.Interaction):
     await interaction.response.send_message("zamn")
     quit()
 
 
 @bot.tree.command(name="revsport")
-@discord.app_commands.describe(car="Car", base_colour='Base colour of car', finish='Finish of base colour', dazzle1='Hex code of top Dazzle', dazzle2='Hex code of bottom Dazzle')
+@discord.app_commands.describe(car="Car", base_colour="Base colour of car", finish="Finish of base colour", dazzle1='Hex code of top dazzle', dazzle2='Hex code of bottom dazzle')
 @discord.app_commands.choices(car=availableCars)
 @discord.app_commands.choices(finish=finishes)
 async def revsport(interaction: discord.Interaction, car: discord.app_commands.Choice[int], finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
@@ -100,7 +99,6 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
         print(e)
         await interaction.response.send_message(f"Input a valid hex code", ephemeral=True)
         return
-
     new = ACCLivery()
     new.setCarModelType(car.value)
     new.setBaseColour(base_colour)
@@ -108,7 +106,6 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
     new.setDazzleTopColour(dazzle1rgb)
     new.setDazzleBottomColour(dazzle2rgb)
     new.zipCar()
-    await interaction.response.send_message(f'Here is your new{car.value} livery',file=new.zipPath)    
-
+    await interaction.response.send_message(f'Here is your new {car.value} livery',file=discord.File(new.getZipPath())
 
 bot.run(token)

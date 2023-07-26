@@ -223,11 +223,12 @@ class ACCLivery:
         
     def zipCar(self):
         self.createDazzle()
-        self.createJson()
+        self.createJsonFile()
         self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID))
         tempDirectory = os.path.join(currentDirectory,'temp')
         os.chdir(tempDirectory)
         shutil.make_archive(str(self.liveryID),'zip', self.zipPath)
+        self.setZipPath(os.path.join(currentDirectory,'temp',self.liveryID)+'.zip')
         os.chdir(currentDirectory)
 
 if __name__ == "__main__":
@@ -240,6 +241,4 @@ if __name__ == "__main__":
     car1.setFolderName('JMT774')
     car1.setInGameName('JMT')
     car1.setRaceNumber(774)
-    car1.createDazzle()
-    car1.createJsonFile()
     car1.zipCar()
