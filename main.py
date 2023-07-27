@@ -14,6 +14,38 @@ def hexToTuple(hexadecimal):
     return tuple(int(hexadecimal[i:i + 2], 16) for i in (0, 2, 4))
 
 
+def is_valid_folder_name(folder_name):  # chatgpt wrote this shit
+    # Define the set of characters not allowed in folder names
+    invalid_chars_windows = '<>:"/\\|?*'
+    invalid_chars_unix = '/'
+
+    # Check if the folder name is empty
+    if not folder_name.strip():
+        return False
+
+    # Check for invalid characters based on the operating system
+    if os.name == 'nt':  # Windows
+        invalid_chars = invalid_chars_windows
+    else:  # Unix-like systems (Linux, macOS)
+        invalid_chars = invalid_chars_unix
+
+    # Check if the folder name contains any invalid characters
+    if any(char in invalid_chars for char in folder_name):
+        return False
+
+    # Check for reserved names in Windows (CON, PRN, AUX, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9,
+    # LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9)
+    if os.name == 'nt':
+        reserved_names = {'CON', 'PRN', 'AUX', 'NUL'}
+        reserved_names.update('COM{}'.format(i) for i in range(1, 10))
+        reserved_names.update('LPT{}'.format(i) for i in range(1, 10))
+        if folder_name.upper() in reserved_names:
+            return False
+
+    # The folder name is valid
+    return True
+
+
 currentDirectory = os.getcwd()
 tempDirectory = os.path.join(currentDirectory, 'temp')
 startTime = datetime.datetime.now()
@@ -130,13 +162,6 @@ async def xm3credits(interaction: discord.Interaction):
         f'for making the bot and the porsche 992 and lambo evo 2 ')
 
 
-@bot.tree.command(name="xm3die")
-async def xm3die(interaction: discord.Interaction):
-    await interaction.response.send_message("zamn")
-    print('rip bot')
-    quit()
-
-
 @bot.tree.command(name="xm3help")
 async def xm3help(interaction: discord.Interaction):
     await interaction.response.send_message("If you're struggling to put in a valid hex code it will look like "
@@ -146,13 +171,19 @@ async def xm3help(interaction: discord.Interaction):
 
 
 @bot.tree.command(name="revsport")
-@discord.app_commands.describe(car="Car model in ACC", race_number="Your race number", base_colour="Base colour of car",
+@discord.app_commands.describe(livery_name="Folder name/in game name of livery", car="Car model in ACC",
+                               race_number="Your race number", base_colour="Base colour of car",
                                finish="Finish for the base colour", dazzle1='Hex code of top dazzle',
                                dazzle2='Hex code of bottom dazzle')
 @discord.app_commands.choices(car=availableCars)
 @discord.app_commands.choices(finish=finishes)
-async def revsport(interaction: discord.Interaction, car: discord.app_commands.Choice[int], race_number: int,
+async def revsport(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
+                   race_number: int,
                    finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
+    if is_valid_folder_name(livery_name):
+        pass
+    else:
+        await interaction.response.send_message(f"Give me a valid name", ephemeral=True)
     try:
         dazzle1rgb = hexToTuple(dazzle1)
         dazzle2rgb = hexToTuple(dazzle2)
@@ -189,8 +220,8 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
     car1.setBaseColour(base_colour)
     car1.setBaseMaterialId(finish.value)
     car1.setCarModelType(car.value)
-    car1.setFolderName(car1.liveryID)
-    car1.setInGameName(car1.liveryID)
+    car1.setFolderName(livery_name)
+    car1.setInGameName(livery_name)
     car1.setRaceNumber(race_number)
     await interaction.response.defer(ephemeral=True)
     car1.createDazzle()
@@ -198,11 +229,9 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
     await interaction.followup.send('art takes time mate')
     car1.zipCar()
     print(car1.getZipPath())
-    await interaction.followup.send(content=f'Here is your new {car.name} livery, before sharing this I would '
-                                            f'recommend changing the team name, the json name and playing around with'
-                                            f' auxilery lights and rim colours. Due limitations with ACC you will '
-                                            f'also need to load a track with the livery to generate the dds files',
-                                    file=discord.File(car1.getZipPath()))
+    await interaction.followup.send(
+        content=f"Here is your new {car.name} livery, it will appear in game as {car1.liveryID}. Feel free to change the name, aux lights and colours in game. If you wish to share your livery load a track with livery to generate both dds files",
+        file=discord.File(car1.getZipPath()))
 
 
 bot.run(token)
