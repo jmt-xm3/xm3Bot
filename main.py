@@ -26,7 +26,8 @@ cars = [{'key': 'AMR V12 Vantage GT3', 'value': 12}, {'key': 'AMR V8 Vantage', '
         {'key': 'Bentley Continental GT3 2015', 'value': 11}, {'key': 'Bentley Continental GT3 2018', 'value': 8},
         {'key': 'Emil Frey Jaguar G3', 'value': 14}, {'key': 'Ferrari 296 GT3', 'value': 32},
         {'key': 'Ferrari 488 GT3 Evo', 'value': 24}, {'key': 'Ferrari 488 GT3', 'value': 2},
-        {'key': 'Honda NSX GT3 Evo', 'value': 21}, {'key': 'Honda NSX GT3', 'value': 17}, {'key': 'Lamborghini Huracán GT3 Evo', 'value': 16}, {'key': 'Lamborghini Huracán GT3 EVO2', 'value': 33},
+        {'key': 'Honda NSX GT3 Evo', 'value': 21}, {'key': 'Honda NSX GT3', 'value': 17},
+        {'key': 'Lamborghini Huracán GT3 Evo', 'value': 16}, {'key': 'Lamborghini Huracán GT3 EVO2', 'value': 33},
         {'key': 'Lamborghini Huracán GT3', 'value': 4}, {'key': 'Lexus RC F GT3', 'value': 15},
         {'key': 'McLaren 650S GT3', 'value': 5}, {'key': 'McLaren 720S GT3', 'value': 22},
         {'key': 'McLaren 720S GT3 EVO', 'value': 35}, {'key': 'Mercedes-AMG GT3', 'value': 1},
@@ -89,9 +90,17 @@ async def xm3die(interaction: discord.Interaction):
     quit()
 
 
+@bot.tree.command(name="xm3help")
+async def xm3help(interaction: discord.Interaction):
+    await interaction.response.send_message("If you're struggling to put in a valid hex code it will look like "
+                                            "'111FFF' each digit can be 0-9 or A-F. Also here are all the colours in "
+                                            "acc if you need help with"
+                                            "base_colour:", file=discord.File('accColours.png'))
+
+
 @bot.tree.command(name="revsport")
-@discord.app_commands.describe(car="Car", race_number="Your race number", base_colour="Base colour of car",
-                               finish="Finish of base colour", dazzle1='Hex code of top dazzle',
+@discord.app_commands.describe(car="Car model in ACC", race_number="Your race number", base_colour="Base colour of car",
+                               finish="Finish for the base colour", dazzle1='Hex code of top dazzle',
                                dazzle2='Hex code of bottom dazzle')
 @discord.app_commands.choices(car=availableCars)
 @discord.app_commands.choices(finish=finishes)
@@ -102,28 +111,28 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
         dazzle2rgb = hexToTuple(dazzle2)
     except Exception as e:
         print(e)
-        await interaction.response.send_message(f"Input a valid hex code", ephemeral=True)
+        await interaction.response.send_message(f"Give me a valid hex code /xm3help", ephemeral=True)
         return
     try:
         if 0 < base_colour <= 359 or 500 <= base_colour <= 532:
             pass
         else:
-            await interaction.response.send_message(f"Input a valid ACC colour", ephemeral=True)
+            await interaction.response.send_message(f"Give me a valid ACC Colour (1-359 and 500-532), try /xm3help", ephemeral=True)
             return
     except Exception as e:
         print(e)
-        await interaction.response.send_message(f"Input a valid ACC Colour", ephemeral=True)
+        await interaction.response.send_message(f"Give me a valid ACC Colour (1-359 and 500-532), try /xm3help", ephemeral=True)
         return
 
     try:
         if 0 <= race_number <= 999:
             pass
         else:
-            await interaction.response.send_message(f"Input a valid race number", ephemeral=True)
+            await interaction.response.send_message(f"Give me a valid race number (0-999)", ephemeral=True)
             return
     except Exception as e:
         print(e)
-        await interaction.response.send_message(f"Input a number", ephemeral=True)
+        await interaction.response.send_message(f"Give me a valid race number (0-999)", ephemeral=True)
         return
     car1 = ACCLivery()
     car1.setDazzleTopColour(dazzle1rgb)
@@ -140,8 +149,11 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
     await interaction.followup.send('art takes time mate')
     car1.zipCar()
     print(car1.getZipPath())
-    await interaction.followup.send(content=f'Here is your new {car.value} livery',
-                                            file=discord.File(car1.getZipPath()))
+    await interaction.followup.send(content=f'Here is your new {car.name} livery, before sharing this I would '
+                                            f'recommend changing the team name, the json name and playing around with'
+                                            f' auxilery lights and rim colours. Due limitations with ACC you will '
+                                            f'also need to load a track with the livery to generate the dds files',
+                                    file=discord.File(car1.getZipPath()))
 
 
 bot.run(token)
