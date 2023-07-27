@@ -6,7 +6,6 @@ import datetime
 from liveryClasses import accCarModels, ACCLivery
 from discord.ext import commands
 
-
 with open('token.txt', 'r') as f:
     token = f.read()
 
@@ -19,9 +18,22 @@ currentDirectory = os.getcwd()
 tempDirectory = os.path.join(currentDirectory, 'temp')
 startTime = datetime.datetime.now()
 materials = [{'key': 'Glossy', 'value': 0}, {'key': 'Matte', 'value': 1}, {'key': 'Satin', 'value': 2}, {
-    'key': 'Satin Metallic', 'value': 3}, {'key': 'Metallic', 'value': 4}, {'key': 'Chrome', 'value': 5}, {'key': 'Clear Chrome', 'value': 6}]
-cars = [{'key': 'AMR V12 Vantage GT3', 'value': 12}, {'key': 'AMR V8 Vantage', 'value': 20}, {'key': 'Audi R8 LMS Evo', 'value': 19}, {'key': 'Audi R8 LMS GT3 Evo 2', 'value': 31}, {'key': 'Audi R8 LMS', 'value': 3}, {'key': 'BMW M4 GT3', 'value': 30}, {'key': 'BMW M6 GT3', 'value': 7}, {'key': 'Bentley Continental GT3 2015', 'value': 11}, {'key': 'Bentley Continental GT3 2018', 'value': 8}, {'key': 'Emil Frey Jaguar G3', 'value': 14}, {'key': 'Ferrari 296 GT3', 'value': 32}, {'key': 'Ferrari 488 GT3 Evo', 'value': 24}, {'key': 'Ferrari 488 GT3', 'value': 2}, {'key': 'Honda NSX GT3 Evo', 'value': 21}, {'key': 'Honda NSX GT3', 'value': 17}, {
-    'key': 'Lamborghini Huracán GT3 Evo', 'value': 16}, {'key': 'Lamborghini Huracán GT3 EVO2', 'value': 33}, {'key': 'Lamborghini Huracán GT3', 'value': 4}, {'key': 'Lexus RC F GT3', 'value': 15}, {'key': 'McLaren 650S GT3', 'value': 5}, {'key': 'McLaren 720S GT3', 'value': 22}, {'key': 'McLaren 720S GT3 EVO', 'value': 35}, {'key': 'Mercedes-AMG GT3', 'value': 1}, {'key': 'Mercedes-AMG GT3 Evo', 'value': 25}, {'key': 'Nissan GT-R Nismo GT3 2015', 'value': 10}, {'key': 'Nissan GT-R Nismo GT3 2018', 'value': 6}, {'key': 'Porsche 991 GT3 R', 'value': 0}, {'key': 'Porsche 991 II GT3 R', 'value': 23}, {'key': 'Porsche 992 GT3 R', 'value': 34}, {'key': 'Reiter Engineering R-EX GT3', 'value': 13}]
+    'key': 'Satin Metallic', 'value': 3}, {'key': 'Metallic', 'value': 4}, {'key': 'Chrome', 'value': 5},
+             {'key': 'Clear Chrome', 'value': 6}]
+cars = [{'key': 'AMR V12 Vantage GT3', 'value': 12}, {'key': 'AMR V8 Vantage', 'value': 20},
+        {'key': 'Audi R8 LMS Evo', 'value': 19}, {'key': 'Audi R8 LMS GT3 Evo 2', 'value': 31},
+        {'key': 'Audi R8 LMS', 'value': 3}, {'key': 'BMW M4 GT3', 'value': 30}, {'key': 'BMW M6 GT3', 'value': 7},
+        {'key': 'Bentley Continental GT3 2015', 'value': 11}, {'key': 'Bentley Continental GT3 2018', 'value': 8},
+        {'key': 'Emil Frey Jaguar G3', 'value': 14}, {'key': 'Ferrari 296 GT3', 'value': 32},
+        {'key': 'Ferrari 488 GT3 Evo', 'value': 24}, {'key': 'Ferrari 488 GT3', 'value': 2},
+        {'key': 'Honda NSX GT3 Evo', 'value': 21}, {'key': 'Honda NSX GT3', 'value': 17}, {'key': 'Lamborghini Huracán GT3 Evo', 'value': 16}, {'key': 'Lamborghini Huracán GT3 EVO2', 'value': 33},
+        {'key': 'Lamborghini Huracán GT3', 'value': 4}, {'key': 'Lexus RC F GT3', 'value': 15},
+        {'key': 'McLaren 650S GT3', 'value': 5}, {'key': 'McLaren 720S GT3', 'value': 22},
+        {'key': 'McLaren 720S GT3 EVO', 'value': 35}, {'key': 'Mercedes-AMG GT3', 'value': 1},
+        {'key': 'Mercedes-AMG GT3 Evo', 'value': 25}, {'key': 'Nissan GT-R Nismo GT3 2015', 'value': 10},
+        {'key': 'Nissan GT-R Nismo GT3 2018', 'value': 6}, {'key': 'Porsche 991 GT3 R', 'value': 0},
+        {'key': 'Porsche 991 II GT3 R', 'value': 23}, {'key': 'Porsche 992 GT3 R', 'value': 34},
+        {'key': 'Reiter Engineering R-EX GT3', 'value': 13}]
 available = []
 for model in accCarModels:
     available.append(model['carModelType'])
@@ -46,6 +58,7 @@ def clearTempDirectory():
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
+
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
@@ -54,33 +67,36 @@ async def on_ready():
     print('------')
 
 
-
 @bot.tree.command(name='xm3time')
 async def xm3time(interaction: discord.Interaction):
     await interaction.response.send_message(f"{startTime} innit")
 
+
 @bot.tree.command(name="xm3sync")
 async def xm3sync(interaction: discord.Interaction):
-        try:
-            synced = await bot.tree.sync()
-            await interaction.response.send_message(f'Synced {len(synced)} synced')
-            print(f'Synced {len(synced)} synced')
-        except Exception as e:
-            print(e)
+    try:
+        synced = await bot.tree.sync()
+        await interaction.response.send_message(f'Synced {len(synced)} commands')
+        print(f'Synced {len(synced)} commands')
+    except Exception as e:
+        print(e)
 
 
 @bot.tree.command(name="xm3die")
 async def xm3die(interaction: discord.Interaction):
-        await interaction.response.send_message("zamn")
-        print('rip bot')
-        quit()
+    await interaction.response.send_message("zamn")
+    print('rip bot')
+    quit()
 
 
 @bot.tree.command(name="revsport")
-@discord.app_commands.describe(car="Car", race_number="Your race number", base_colour="Base colour of car", finish="Finish of base colour", dazzle1='Hex code of top dazzle', dazzle2='Hex code of bottom dazzle')
+@discord.app_commands.describe(car="Car", race_number="Your race number", base_colour="Base colour of car",
+                               finish="Finish of base colour", dazzle1='Hex code of top dazzle',
+                               dazzle2='Hex code of bottom dazzle')
 @discord.app_commands.choices(car=availableCars)
 @discord.app_commands.choices(finish=finishes)
-async def revsport(interaction: discord.Interaction, car: discord.app_commands.Choice[int],race_number:int, finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
+async def revsport(interaction: discord.Interaction, car: discord.app_commands.Choice[int], race_number: int,
+                   finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
     try:
         dazzle1rgb = hexToTuple(dazzle1)
         dazzle2rgb = hexToTuple(dazzle2)
@@ -98,7 +114,7 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
         print(e)
         await interaction.response.send_message(f"Input a valid ACC Colour", ephemeral=True)
         return
-        
+
     try:
         if 0 <= race_number <= 999:
             pass
@@ -118,12 +134,14 @@ async def revsport(interaction: discord.Interaction, car: discord.app_commands.C
     car1.setFolderName(car1.liveryID)
     car1.setInGameName(car1.liveryID)
     car1.setRaceNumber(race_number)
-    await interaction.response.edit_message(content='We are just painting your new livery')
+    await interaction.response.defer(ephemeral=True)
     car1.createDazzle()
     car1.createJsonFile()
-    await interaction.response.edit_message(content='We are just wrapping up your new livery')
+    await interaction.followup.send('art takes time mate')
     car1.zipCar()
     print(car1.getZipPath())
-    await interaction.response.edit_message(content=f'Here is your new {car.value} livery',attachments=discord.File(car1.getZipPath()))
+    await interaction.followup.send(content=f'Here is your new {car.value} livery',
+                                            file=discord.File(car1.getZipPath()))
+
 
 bot.run(token)

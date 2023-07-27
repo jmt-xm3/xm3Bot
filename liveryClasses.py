@@ -1,5 +1,4 @@
 from changeColour import change_colour as changeColoursOfImage
-from saveAsDds import saveAsDds as toDDS
 
 import os
 import shutil
