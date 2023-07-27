@@ -2,5 +2,4 @@
 /.vscode
 /.idea
 /__pycache__
-/token
-/trying
+/token.txt
