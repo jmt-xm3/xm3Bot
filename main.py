@@ -4,7 +4,7 @@ import os
 import shutil
 import datetime
 from liveryClasses import accCarModels, ACCLivery
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 with open('token.txt', 'r') as f:
     token = f.read()
@@ -116,13 +116,16 @@ for finish in materials:
     finishes.append(discord.app_commands.Choice(
         name=finish['key'], value=finish['value']))
 
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
-def clearTempDirectory():
+
+@tasks.loop(seconds=43200)
+async def clearTempDirectory():
+    print('clearing temp every 12 hours')
+    await asyncio.sleep(1)
     shutil.rmtree(tempDirectory)
     os.mkdir("temp")
-
-
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+    print('temp is cleared')
 
 
 @bot.event
@@ -131,11 +134,13 @@ async def on_ready():
     print('------')
     print('free tay k 47')
     print('------')
+    clearTempDirectory.start()
+    bot.appinfo = await bot.application_info()
 
 
 @bot.tree.command(name='xm3time')
 async def xm3time(interaction: discord.Interaction):
-    currentTime = datetime.now()
+    currentTime = datetime.datetime.now()
     timeDifference = currentTime - startTime
     days = timeDifference.days
     hours, remainder = divmod(timeDifference.seconds, 3600)
@@ -147,12 +152,16 @@ async def xm3time(interaction: discord.Interaction):
 
 @bot.tree.command(name="xm3sync")
 async def xm3sync(interaction: discord.Interaction):
-    try:
-        synced = await bot.tree.sync()
-        await interaction.response.send_message(f'Synced {len(synced)} commands')
-        print(f'Synced {len(synced)} commands')
-    except Exception as e:
-        print(e)
+    if interaction.user.id == 412281276922462219:
+        try:
+            synced = await bot.tree.sync()
+            await interaction.response.send_message(f'Synced {len(synced)} commands', ephemeral=True)
+            print(f'Synced {len(synced)} commands')
+        except Exception as e:
+            print(e)
+    else:
+        await interaction.response.send_message(f'not permitted to do that', ephemeral=True)
+        print(interaction.user.id)
 
 
 @bot.tree.command(name="xm3credits")
@@ -230,7 +239,9 @@ async def revsport(interaction: discord.Interaction, livery_name: str, car: disc
     car1.zipCar()
     print(car1.getZipPath())
     await interaction.followup.send(
-        content=f"Here is your new {car.name} livery, it will appear in game as {car1.liveryID}. Feel free to change the name, aux lights and colours in game. If you wish to share your livery load a track with livery to generate both dds files",
+        content=f"Here is your new {car.name} livery, the cars.json will be as {car1.liveryID}.json Feel free to "
+                f"change the name, aux lights and colours in game. If you wish to share your livery load a track with "
+                f"livery to generate both dds files",
         file=discord.File(car1.getZipPath()))
 
 
