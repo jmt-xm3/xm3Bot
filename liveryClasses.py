@@ -12,9 +12,9 @@ def hexToTuple(hex):
 
 currentDirectory = os.getcwd()
 accCarModels = [{"carModelType": 8, "name": "BEN"}, {"carModelType": 20, "name": "V8"},
-                {"carModelType": 21, "name": "NSX"},
+                {"carModelType": 21, "name": "NSX"}, {"carModelType": 22, "name": "MACCA"},
                 {"carModelType": 25, "name": "MERCEVO"}, {"carModelType": 59, "name": "MACCAGT4"},
-                {"carModelType": 35, "name": "MACCA"}, {"carModelType": 30, "name": "M4"},
+                {"carModelType": 35, "name": "MACCAEVO"}, {"carModelType": 30, "name": "M4"},
                 {"carModelType": 33, "name": "LAMBOEVO2"}, {"carModelType": 14, "name": "JAG"},
                 {"carModelType": 56, "name": "GIN"}, {"carModelType": 34, "name": "992"},
                 {"carModelType": 23, "name": "991"}, {"carModelType": 24, "name": "488EVO"},

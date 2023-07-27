@@ -174,7 +174,7 @@ async def xm3credits(interaction: discord.Interaction):
 @bot.tree.command(name="xm3help")
 async def xm3help(interaction: discord.Interaction):
     await interaction.response.send_message("If you're struggling to put in a valid hex code it will look like "
-                                            "'111FFF' each digit can be 0-9 or A-F. Also here are all the colours in "
+                                            "'111FFF', do not add a hashtag, each digit can be 0-9 or A-F. Also here are all the colours in "
                                             "acc if you need help with "
                                             "base_colour:", file=discord.File('accColours.png'), ephemeral=True)
 
@@ -239,7 +239,7 @@ async def revsport(interaction: discord.Interaction, livery_name: str, car: disc
     car1.zipCar()
     print(car1.getZipPath())
     await interaction.followup.send(
-        content=f"Here is your new {car.name} livery, the cars.json will be as {car1.liveryID}.json Feel free to "
+        content=f"Here is your new {car.name} livery, the cars.json called {car1.liveryID}.json Feel free to "
                 f"change the name, aux lights and colours in game. If you wish to share your livery load a track with "
                 f"livery to generate both dds files",
         file=discord.File(car1.getZipPath()))
