@@ -236,11 +236,11 @@ async def revsport(interaction: discord.Interaction, livery_name: str, car: disc
     await interaction.response.defer(ephemeral=True)
     car1.createDazzle()
     car1.createJsonFile()
-    await interaction.followup.send('art takes time mate')
+    await interaction.followup.send('art takes time sorry boss')
     car1.zipCar()
     print(car1.getZipPath())
     await interaction.followup.send(
-        content=f"Here is your new {car.name} livery, the cars json file in customs/cars is called {car1.liveryID}.json. I recommend change the name of the json file to something recognisable. In game feel free to change the name, colours, rims and aux lights just make sure you load a track with the livery to generate dds files if you wish to share it.",
+        content=f"Here is your new {car.name} livery, the cars json file in customs/cars is called {car1.liveryID}.json. I recommend you change the name of the json file to something recognisable. In game feel free to change the name, colours, rims and aux lights just make sure you load a track with the livery to generate dds files if you wish to share it.",
         file=discord.File(car1.getZipPath()))
 
 
