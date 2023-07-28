@@ -113,9 +113,9 @@ for c in sorted_data:
     availableCars.append(discord.app_commands.Choice(
         name=c['key'], value=c['value']))
 
-for finish in materials:
+for f in materials:
     finishes.append(discord.app_commands.Choice(
-        name=finish['key'], value=finish['value']))
+        name=f['key'], value=f['value']))
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
@@ -168,23 +168,23 @@ async def xm3sync(interaction: discord.Interaction):
 @bot.tree.command(name="xm3credits")
 async def xm3credits(interaction: discord.Interaction):
     await interaction.response.send_message(
-        f'credit to Marley (brexite) for making basically every one of these liveries. shout out me (sonywh1000xm3) '
-        f'for making the bot and the porsche 992 and lambo evo 2 ')
+        f'credit to Marley (brexite) for making basically every one of these liveries.', ephemeral=True)
 
 
 @bot.tree.command(name="xm3help")
 async def xm3help(interaction: discord.Interaction):
-    await interaction.response.send_message("If you're struggling to put in a valid hex code it will look like "
-                                            "'111FFF', do not add a hashtag, each digit can be 0-9 or A-F. Also here are all the colours in "
-                                            "acc if you need help with "
-                                            "base_colour:", file=discord.File('accColours.png'), ephemeral=True)
+    await interaction.response.send_message(
+        "If you're struggling to put in a valid hex code it will look like '111FFF', do not add a hashtag, each digit can be 0-9 or A-F. Also here are all the colours in acc if you need help with base_colour:",
+        file=discord.File('accColours.png'), ephemeral=True)
 
 
 @bot.tree.command(name="revsport")
-@discord.app_commands.describe(livery_name="Folder name/in game name of livery", car="Car model in ACC",
-                               race_number="Your race number", base_colour="Base colour of car",
-                               finish="Finish for the base colour", dazzle1='Hex code of top dazzle',
-                               dazzle2='Hex code of bottom dazzle')
+@discord.app_commands.describe(livery_name="In-game and folder name for livery (in-game name can be changed after)",
+                               car="Car model in ACC",
+                               race_number="Your race number", base_colour="Base colour of car (number in ACC)",
+                               finish="Finish for the base colour ",
+                               dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
+                               dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
 @discord.app_commands.choices(car=availableCars)
 @discord.app_commands.choices(finish=finishes)
 async def revsport(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
@@ -199,7 +199,7 @@ async def revsport(interaction: discord.Interaction, livery_name: str, car: disc
         dazzle2rgb = hexToTuple(dazzle2)
     except Exception as e:
         print(e)
-        await interaction.response.send_message(f"Give me a valid hex code /xm3help", ephemeral=True)
+        await interaction.response.send_message(f"Give me a valid hex code (maybe you had a # by accident) /xm3help", ephemeral=True)
         return
     try:
         if 0 < base_colour <= 359 or 500 <= base_colour <= 532:
@@ -240,9 +240,7 @@ async def revsport(interaction: discord.Interaction, livery_name: str, car: disc
     car1.zipCar()
     print(car1.getZipPath())
     await interaction.followup.send(
-        content=f"Here is your new {car.name} livery, the cars.json called {car1.liveryID}.json Feel free to "
-                f"change the name, aux lights and colours in game. If you wish to share your livery load a track with "
-                f"livery to generate both dds files",
+        content=f"Here is your new {car.name} livery, the cars json file in customs/cars is called {car1.liveryID}.json. I recommend change the name of the json file to something recognisable. In game feel free to change the name, colours, rims and aux lights just make sure you load a track with the livery to generate dds files if you wish to share it.",
         file=discord.File(car1.getZipPath()))
 
 
