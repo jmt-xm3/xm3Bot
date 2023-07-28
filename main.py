@@ -108,7 +108,8 @@ for model in accCarModels:
             available.append(c)
 availableCars = []
 finishes = []
-for c in available:
+sorted_data = sorted(available, key=lambda x: x['key'])
+for c in sorted_data:
     availableCars.append(discord.app_commands.Choice(
         name=c['key'], value=c['value']))
 
