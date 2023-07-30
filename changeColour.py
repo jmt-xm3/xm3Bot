@@ -1,4 +1,4 @@
-from PIL import Image  # chat gpt did all this low-key
+from PIL import Image  # I love ChatGPT
 
 
 def change_colour(image_path, target_color, replacement_color, tolerance=0):
