@@ -175,12 +175,22 @@ class ACCLivery:
         carPath = os.path.join(currentDirectory, 'temp',
                                self.liveryID, 'Liveries', self.folderName)
         os.chdir(currentDirectory)
-        first = changeColoursOfImage(
-            dazzlePath, (0, 0, 0), self.DazzleTopColour)
-        first.save(carPath + "/decals.png")
-        final = changeColoursOfImage(
-            carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
-        final.save(carPath + "/decals.png")
+        if self.DazzleTopColour == (255,255,255):
+            first = changeColoursOfImage(
+            dazzlePath, (255, 255, 255), self.DazzleBottomColour)
+            first.save(carPath + "/decals.png")
+            final = changeColoursOfImage(
+            carPath + "/decals.png", (0, 0, 0), self.DazzleTopColour)
+            final.save(carPath + "/decals.png")
+            sponsorPng = os.path.join(currentDirectory, 'acc',
+                                  sponsorTemplate)  # copy sponsors.png and finish JSON from acc folder to livery folder
+        else:
+            first = changeColoursOfImage(
+                dazzlePath, (0, 0, 0), self.DazzleTopColour)
+            first.save(carPath + "/decals.png")
+            final = changeColoursOfImage(
+                carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
+            final.save(carPath + "/decals.png")
         sponsorPng = os.path.join(currentDirectory, 'acc',
                                   sponsorTemplate)  # copy sponsors.png and finish JSON from acc folder to livery folder
         sponsorJson = os.path.join(currentDirectory, 'acc', 'sponsors.json')
