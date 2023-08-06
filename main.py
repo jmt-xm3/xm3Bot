@@ -117,8 +117,23 @@ for f in materials:
     finishes.append(discord.app_commands.Choice(
         name=f['key'], value=f['value']))
 
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
+
+intents = discord.Intents.all()
+bot = discord.Client(intents=intents)
+tree = discord.app_commands.CommandTree(bot)
+
+
+
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print('------')
+    print('free tay k 47')
+    print('------')
+    testGuild = bot.get_guild(1130434664587346011)
+    tree.copy_global_to(guild=testGuild)
+    clearTempDirectory.start()
 
 @tasks.loop(seconds=43200)
 async def clearTempDirectory():
@@ -128,18 +143,7 @@ async def clearTempDirectory():
     os.mkdir("temp")
     print('temp is cleared')
 
-
-@bot.event
-async def on_ready():
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
-    print('------')
-    print('free tay k 47')
-    print('------')
-    clearTempDirectory.start()
-    bot.appinfo = await bot.application_info()
-
-
-@bot.tree.command(name='xm3time')
+@tree.command(name='xm3time')
 async def xm3time(interaction: discord.Interaction):
     currentTime = datetime.datetime.now()
     timeDifference = currentTime - startTime
@@ -151,7 +155,7 @@ async def xm3time(interaction: discord.Interaction):
         f"xm3 bot has been alive since {startTimeFormatted} for: {days} days, {hours} hours, {minutes} minutes, {seconds} seconds.")
 
 
-@bot.tree.command(name="xm3sync")
+@tree.command(name="xm3sync")
 async def xm3sync(interaction: discord.Interaction):
     if interaction.user.id == 412281276922462219:
         try:
@@ -165,20 +169,20 @@ async def xm3sync(interaction: discord.Interaction):
         print(interaction.user.id)
 
 
-@bot.tree.command(name="xm3credits")
+@tree.command(name="xm3credits")
 async def xm3credits(interaction: discord.Interaction):
     await interaction.response.send_message(
         f'credit to Marley (brexite) for making basically every one of these liveries.', ephemeral=True)
 
 
-@bot.tree.command(name="xm3help")
+@tree.command(name="xm3help")
 async def xm3help(interaction: discord.Interaction):
     await interaction.response.send_message(
         "If you're struggling to put in a valid hex code it will look like '111FFF', do not add a hashtag, each digit can be 0-9 or A-F. Also here are all the colours in acc if you need help with base_colour:",
         file=discord.File('accColours.png'), ephemeral=True)
 
 
-@bot.tree.command(name="revsport")
+@tree.command(name="revsport")
 @discord.app_commands.describe(livery_name="In-game and folder name for livery (in-game name can be changed after)",
                                car="Car model in ACC",
                                race_number="Your race number", base_colour="Base colour of car (number in ACC)",
