@@ -135,6 +135,13 @@ async def on_ready():
     print('------')
     print('free tay k 47')
     print('------')
+    testGuild = discord.Object(id=1130434664587346011)
+    try:
+            bot.tree.copy_global_to(guild=testGuild)
+            print(f'Synced commands')
+    except Exception as e:
+            print(e)
+
     clearTempDirectory.start()
     bot.appinfo = await bot.application_info()
 
@@ -174,7 +181,7 @@ async def xm3credits(interaction: discord.Interaction):
 @bot.tree.command(name="xm3help")
 async def xm3help(interaction: discord.Interaction):
     await interaction.response.send_message(
-        "If you're struggling to put in a valid hex code it will look like '111FFF', do not add a hashtag, each digit can be 0-9 or A-F. Also here are all the colours in acc if you need help with base_colour:",
+        "If you're struggling to put in a valid hex code it will look like 'AFC193', do not add a hashtag, each digit can be 0-9 or A-F. Also here are all the colours in acc if you need help with base_colour:",
         file=discord.File('accColours.png'), ephemeral=True)
 
 
