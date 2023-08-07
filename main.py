@@ -45,7 +45,7 @@ def is_valid_folder_name(folder_name):  # chatgpt wrote this shit
     # The folder name is valid
     return True
 
-
+blackList = [272455799253762058]
 currentDirectory = os.getcwd()
 tempDirectory = os.path.join(currentDirectory, 'temp')
 startTime = datetime.datetime.now()
@@ -197,6 +197,10 @@ async def xm3help(interaction: discord.Interaction):
 async def revsport(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
                    race_number: int,
                    finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
+    if bot.user.id in blackList:
+        await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
+    else:
+        pass
     if is_valid_folder_name(livery_name):
         pass
     else:
