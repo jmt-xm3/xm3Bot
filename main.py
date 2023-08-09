@@ -3,8 +3,13 @@ import discord
 import os
 import shutil
 import datetime
+import sqlite3
 from liveryClasses import accCarModels, ACCLivery
 from discord.ext import commands, tasks
+
+conn = sqlite3.connect('preferences.db')
+cur = conn.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, livery_name varchar(100) NOT NULL,base_colour varchar(6) not NULL, dazzle1 varchar(6) not NULL, dazzle2 varchar(6) not NULL")
 
 with open('token.txt', 'r') as f:
     token = f.read()
@@ -45,13 +50,14 @@ def is_valid_folder_name(folder_name):  # chatgpt wrote this shit
     # The folder name is valid
     return True
 
+
 blackList = [272455799253762058]
 currentDirectory = os.getcwd()
 tempDirectory = os.path.join(currentDirectory, 'temp')
 startTime = datetime.datetime.now()
 materials = [{'key': 'Glossy', 'value': 0}, {'key': 'Matte', 'value': 1}, {'key': 'Satin', 'value': 2}, {
     'key': 'Satin Metallic', 'value': 3}, {'key': 'Metallic', 'value': 4}, {'key': 'Chrome', 'value': 5},
-             {'key': 'Clear Chrome', 'value': 6}]
+    {'key': 'Clear Chrome', 'value': 6}]
 cars = [
     {'key': 'AMR V12 Vantage GT3', 'value': 12},
     {'key': 'AMR V8 Vantage', 'value': 20},
@@ -106,11 +112,11 @@ for model in accCarModels:
     for c in cars:
         if model['carModelType'] == c['value']:
             available.append(c)
-availableCars = []
+accCars = []
 finishes = []
 sorted_data = sorted(available, key=lambda x: x['key'])
 for c in sorted_data:
-    availableCars.append(discord.app_commands.Choice(
+    accCars.append(discord.app_commands.Choice(
         name=c['key'], value=c['value']))
 
 for f in materials:
@@ -137,10 +143,10 @@ async def on_ready():
     print('------')
     testGuild = discord.Object(id=1130434664587346011)
     try:
-            bot.tree.copy_global_to(guild=testGuild)
-            print(f'Synced commands')
+        bot.tree.copy_global_to(guild=testGuild)
+        print(f'Synced commands')
     except Exception as e:
-            print(e)
+        print(e)
 
     clearTempDirectory.start()
     bot.appinfo = await bot.application_info()
@@ -185,18 +191,68 @@ async def xm3help(interaction: discord.Interaction):
         file=discord.File('accColours.png'), ephemeral=True)
 
 
-@bot.tree.command(name="revsport")
+@bot.tree.command(name="reviracing", description='Standard REVSPORT IRacing livery')
 @discord.app_commands.describe(livery_name="In-game and folder name for livery (in-game name can be changed after)",
                                car="Car model in ACC",
                                race_number="Your race number", base_colour="Base colour of car (number in ACC)",
                                finish="Finish for the base colour ",
                                dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
                                dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
-@discord.app_commands.choices(car=availableCars)
+@discord.app_commands.choices(car=accCars)
+async def revsportIRacing(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
+                          race_number: int,
+                          finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
+    if bot.user.id in blackList:
+        await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
+    else:
+        await interaction.response.send_message(f"You are permitted to do that", ephemeral=True)
+
+
+@bot.tree.command(name="carpreferences", description='Set your preferences for your car to use the /mycar command')
+@discord.app_commands.describe(livery_name="In-game and folder name for livery in ACC",
+                               race_number="Your race number", base_colour_acc="Base colour of car (number in ACC)", base_colour="Hex code for base colour in IRacing (F1F1F1 as an example)",
+                               finish="Finish for the base colour in acc use /xm3help to see all of them",
+                               dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
+                               dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
 @discord.app_commands.choices(finish=finishes)
-async def revsport(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
-                   race_number: int,
-                   finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
+async def carPreferences(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
+                          race_number: int,
+                          finish: discord.app_commands.Choice[int], base_colour_acc: int, base_colour: str, dazzle1: str, dazzle2: str):
+    if bot.user.id in blackList:
+        await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
+    else:
+        await interaction.response.send_message(f"You are permitted to do that", ephemeral=True)
+
+
+@bot.tree.command(name="special", description='Special/one-off liveries')
+@discord.app_commands.describe(livery_name="In-game and folder name for livery (in-game name can be changed after)",
+                               car="Car model in ACC",
+                               race_number="Your race number", base_colour="Base colour of car (number in ACC)",
+                               finish="Finish for the base colour ",
+                               dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
+                               dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
+@discord.app_commands.choices(car=accCars)
+async def revsportIRacing(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
+                          race_number: int,
+                          finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
+    if bot.user.id in blackList:
+        await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
+    else:
+        await interaction.response.send_message(f"You are permitted to do that", ephemeral=True)
+
+
+@bot.tree.command(name="revacc", description='Standard REVSPORT Assetto Corsa Competizione livery')
+@discord.app_commands.describe(livery_name="In-game and folder name for livery (in-game name can be changed after)",
+                               car="Car model in ACC",
+                               race_number="Your race number", base_colour="Base colour of car (number in ACC)",
+                               finish="Finish for the base colour ",
+                               dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
+                               dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
+@discord.app_commands.choices(car=accCars)
+@discord.app_commands.choices(finish=finishes)
+async def revsportACC(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
+                      race_number: int,
+                      finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
     if bot.user.id in blackList:
         await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
     else:
@@ -244,7 +300,7 @@ async def revsport(interaction: discord.Interaction, livery_name: str, car: disc
     car1.setFolderName(livery_name)
     car1.setInGameName(livery_name)
     car1.setRaceNumber(race_number)
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer()
     car1.createDazzle()
     car1.createJsonFile()
     await interaction.followup.send('art takes time sorry boss')
