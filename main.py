@@ -9,7 +9,17 @@ from discord.ext import commands, tasks
 
 conn = sqlite3.connect('preferences.db')
 cur = conn.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, livery_name varchar(100) NOT NULL,base_colour varchar(6) not NULL, dazzle1 varchar(6) not NULL, dazzle2 varchar(6) not NULL")
+cur.execute("""CREATE TABLE IF NOT EXISTS user
+            (id INTEGER PRIMARY KEY, 
+            livery_name varchar(100) NOT NULL,
+            race_number INT,
+            finish INT,
+            base_colour_acc INT NOT NULL,
+            base_colour varchar(6) NOT NULL,
+            dazzle1 varchar(6) NOT NULL, 
+            dazzle2 varchar(6) NOT NULL)""")
+conn.commit()
+conn.close()
 
 with open('token.txt', 'r') as f:
     token = f.read()
@@ -51,7 +61,7 @@ def is_valid_folder_name(folder_name):  # chatgpt wrote this shit
     return True
 
 
-blackList = [272455799253762058]
+blacklist = [272455799253762058]
 currentDirectory = os.getcwd()
 tempDirectory = os.path.join(currentDirectory, 'temp')
 startTime = datetime.datetime.now()
@@ -202,7 +212,7 @@ async def xm3help(interaction: discord.Interaction):
 async def revsportIRacing(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
                           race_number: int,
                           finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
-    if bot.user.id in blackList:
+    if interaction.user.id in blacklist:
         await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
     else:
         await interaction.response.send_message(f"You are permitted to do that", ephemeral=True)
@@ -210,17 +220,58 @@ async def revsportIRacing(interaction: discord.Interaction, livery_name: str, ca
 
 @bot.tree.command(name="carpreferences", description='Set your preferences for your car to use the /mycar command')
 @discord.app_commands.describe(livery_name="In-game and folder name for livery in ACC",
-                               race_number="Your race number", base_colour_acc="Base colour of car (number in ACC)", base_colour="Hex code for base colour in IRacing (F1F1F1 as an example)",
-                               finish="Finish for the base colour in acc use /xm3help to see all of them",
+                               race_number="Your race number", base_colour_acc="Base colour of car (number in ACC) use /xm3help if unsure", base_colour="Hex code for base colour in IRacing (F1F1F1 as an example)",
+                               finish="Finish for the base colour in acc",
                                dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
                                dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
 @discord.app_commands.choices(finish=finishes)
-async def carPreferences(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
-                          race_number: int,
-                          finish: discord.app_commands.Choice[int], base_colour_acc: int, base_colour: str, dazzle1: str, dazzle2: str):
-    if bot.user.id in blackList:
+async def carPreferences(interaction: discord.Interaction, livery_name: str,
+                         race_number: int,
+                         finish: discord.app_commands.Choice[int], base_colour_acc: int, base_colour: str, dazzle1: str, dazzle2: str):
+    if interaction.user.id in blacklist:
         await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
+    if is_valid_folder_name(livery_name):
+        pass
     else:
+        await interaction.response.send_message(f"Give me a valid name", ephemeral=True)
+    try:
+        hexToTuple(dazzle1)
+        hexToTuple(dazzle2)
+        hexToTuple(base_colour)
+    except Exception as e:
+        print(e)
+        await interaction.response.send_message(f"Give me a valid hex code (maybe you had a # by accident) /xm3help", ephemeral=True)
+        return
+    try:
+        if 0 < base_colour_acc <= 359 or 500 <= base_colour_acc <= 532:
+            pass
+        else:
+            await interaction.response.send_message(f"Give me a valid ACC Colour (1-359 and 500-532), try /xm3help",
+                                                    ephemeral=True)
+            return
+    except Exception as e:
+        print(e)
+        await interaction.response.send_message(f"Give me a valid ACC Colour (1-359 and 500-532), try /xm3help",
+                                                ephemeral=True)
+        return
+
+    try:
+        if 0 <= race_number <= 999:
+            pass
+        else:
+            await interaction.response.send_message(f"Give me a valid race number (0-999)", ephemeral=True)
+            return
+    except Exception as e:
+        print(e)
+        await interaction.response.send_message(f"Give me a valid race number (0-999)", ephemeral=True)
+        return
+    else:
+        conn = sqlite3.connect('preferences.db')
+        cur = conn.cursor()
+        cur.execute("INSERT OR REPLACE INTO user VALUES(?,?,?,?,?,?,?,?)", (interaction.user.id,
+                    livery_name, race_number, finish.value, base_colour_acc, base_colour, dazzle1, dazzle2))
+        conn.commit()
+        conn.close()
         await interaction.response.send_message(f"You are permitted to do that", ephemeral=True)
 
 
@@ -232,10 +283,10 @@ async def carPreferences(interaction: discord.Interaction, livery_name: str, car
                                dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
                                dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
 @discord.app_commands.choices(car=accCars)
-async def revsportIRacing(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
-                          race_number: int,
-                          finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
-    if bot.user.id in blackList:
+async def special(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
+                  race_number: int,
+                  finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
+    if interaction.user.id in blacklist:
         await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
     else:
         await interaction.response.send_message(f"You are permitted to do that", ephemeral=True)
@@ -253,7 +304,7 @@ async def revsportIRacing(interaction: discord.Interaction, livery_name: str, ca
 async def revsportACC(interaction: discord.Interaction, livery_name: str, car: discord.app_commands.Choice[int],
                       race_number: int,
                       finish: discord.app_commands.Choice[int], base_colour: int, dazzle1: str, dazzle2: str):
-    if bot.user.id in blackList:
+    if interaction.user.id in blacklist:
         await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
     else:
         pass
@@ -280,7 +331,6 @@ async def revsportACC(interaction: discord.Interaction, livery_name: str, car: d
         await interaction.response.send_message(f"Give me a valid ACC Colour (1-359 and 500-532), try /xm3help",
                                                 ephemeral=True)
         return
-
     try:
         if 0 <= race_number <= 999:
             pass
@@ -310,5 +360,31 @@ async def revsportACC(interaction: discord.Interaction, livery_name: str, car: d
         content=f"Here is your new {car.name} livery, the cars json file in customs/cars is called {car1.liveryID}.json. I recommend you change the name of the json file to something recognisable. In game feel free to change the name, colours, rims and aux lights just make sure you load a track with the livery to generate dds files if you wish to share it.",
         file=discord.File(car1.getZipPath()))
 
+
+@bot.tree.command(name="mycar", description='Car based on preferences set in /carpreferences')
+@discord.app_commands.describe(car="Car model in ACC")
+@discord.app_commands.choices(car=accCars)
+async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choice[int]):
+    if interaction.user.id not in blacklist:
+        try:
+            conn = sqlite3.connect("preferences.db")
+            cur = conn.cursor()
+            user_id = int(interaction.user.id)
+            cur.execute("SELECT * FROM user WHERE id = ?", (user_id,))
+            user_data = cur.fetchone()  # Assuming you're expecting one row
+            if user_data:
+                column_names = [description[0]
+                                for description in cur.description]
+                user_dict = dict(zip(column_names, user_data))
+                # Now user_dict contains the user data as a dictionary
+                print(user_dict)
+            else:
+                await interaction.response.send_message(f"User not found try /carpreferences first", ephemeral=True)
+        except sqlite3.Error as e:
+            print("SQLite error:", e)
+        finally:
+            conn.close()  # Make sure to close the connection when done
+    else:
+        await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
 
 bot.run(token)
