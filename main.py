@@ -357,7 +357,7 @@ async def revsportACC(interaction: discord.Interaction, livery_name: str, car: d
     car1.zipCar()
     print(car1.getZipPath())
     await interaction.followup.send(
-        content=f"Here is your new {car.name} livery, the cars json file in customs/cars is called {car1.liveryID}.json. I recommend you change the name of the json file to something recognisable. In game feel free to change the name, colours, rims and aux lights just make sure you load a track with the livery to generate dds files if you wish to share it.",
+        content=f"Here is your {car.name}, you should probably change the name of the json file",
         file=discord.File(car1.getZipPath()))
 
 
@@ -375,15 +375,32 @@ async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choi
             if user_data:
                 column_names = [description[0]
                                 for description in cur.description]
-                user_dict = dict(zip(column_names, user_data))
-                # Now user_dict contains the user data as a dictionary
-                print(user_dict)
+                userPref = dict(zip(column_names, user_data))
+                car1 = ACCLivery()
+                car1.setDazzleTopColour(userPref['dazzle1'])
+                car1.setDazzleBottomColour(userPref['dazzle2'])
+                car1.setBaseColour(userPref['base_colour_acc'])
+                car1.setBaseMaterialId(userPref['finish'])
+                car1.setCarModelType(car.value)
+                car1.setFolderName(userPref['livery_name'])
+                car1.setInGameName(userPref['livery_name'])
+                car1.setRaceNumber(userPref['race_number'])
+                await interaction.response.defer()
+                car1.createDazzle()
+                car1.createJsonFile()
+                await interaction.followup.send('art takes time sorry boss')
+                car1.zipCar()
+                print(car1.getZipPath())
+                await interaction.followup.send(
+                    content=f"Here is your {car.name}, you should probably change the name of the .json file",
+                    file=discord.File(car1.getZipPath()))
             else:
                 await interaction.response.send_message(f"User not found try /carpreferences first", ephemeral=True)
         except sqlite3.Error as e:
             print("SQLite error:", e)
         finally:
             conn.close()  # Make sure to close the connection when done
+
     else:
         await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
 
