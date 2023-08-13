@@ -272,7 +272,7 @@ async def carPreferences(interaction: discord.Interaction, livery_name: str,
                     livery_name, race_number, finish.value, base_colour_acc, base_colour, dazzle1, dazzle2))
         conn.commit()
         conn.close()
-        await interaction.response.send_message(f"You are permitted to do that", ephemeral=True)
+        await interaction.response.send_message(f"Preference set", ephemeral=True)
 
 
 @bot.tree.command(name="special", description='Special/one-off liveries')
@@ -387,7 +387,7 @@ async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choi
                 car1.setFolderName(userPref['livery_name'])
                 car1.setInGameName(userPref['livery_name'])
                 car1.setRaceNumber(userPref['race_number'])
-                await interaction.response.defer('painting car...')
+                await interaction.response.defer()
                 car1.createDazzle()
                 car1.createJsonFile()
                 await interaction.followup.send('finishing touches...')
