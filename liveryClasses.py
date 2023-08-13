@@ -12,13 +12,20 @@ def hexToTuple(hex):
 
 currentDirectory = os.getcwd()
 accCarModels = [{"carModelType": 8, "name": "BEN"}, {"carModelType": 20, "name": "V8"},
-                {"carModelType": 21, "name": "NSX"}, {"carModelType": 22, "name": "MACCA"},
-                {"carModelType": 25, "name": "MERCEVO"}, {"carModelType": 59, "name": "MACCAGT4"},
-                {"carModelType": 35, "name": "MACCAEVO"}, {"carModelType": 30, "name": "M4"},
-                {"carModelType": 33, "name": "LAMBOEVO2"}, {"carModelType": 14, "name": "JAG"},
-                {"carModelType": 56, "name": "GIN"}, {"carModelType": 34, "name": "992"},
-                {"carModelType": 23, "name": "991"}, {"carModelType": 24, "name": "488EVO"},
+                {"carModelType": 21, "name": "NSX"}, {
+                    "carModelType": 22, "name": "MACCA"},
+                {"carModelType": 25, "name": "MERCEVO"}, {
+                    "carModelType": 59, "name": "MACCAGT4"},
+                {"carModelType": 35, "name": "MACCAEVO"}, {
+                    "carModelType": 30, "name": "M4"},
+                {"carModelType": 33, "name": "LAMBOEVO2"}, {
+                    "carModelType": 14, "name": "JAG"},
+                {"carModelType": 56, "name": "GIN"}, {
+                    "carModelType": 34, "name": "992"},
+                {"carModelType": 23, "name": "991"}, {
+                    "carModelType": 24, "name": "488EVO"},
                 {"carModelType": 32, "name": "296"}, {"carModelType": 31, "name": "EVO2"}]
+iracingCars = []
 
 
 class ACCLivery:
@@ -107,9 +114,6 @@ class ACCLivery:
     def setRaceNumber(self, raceNumber):
         self.raceNumber = raceNumber
 
-    def setDazzleTopColour(self, DazzleTopColour):
-        self.DazzleTopColour = DazzleTopColour
-
     def setDazzleBottomColour(self, DazzleBottomColour):
         self.DazzleBottomColour = DazzleBottomColour
 
@@ -175,22 +179,18 @@ class ACCLivery:
         carPath = os.path.join(currentDirectory, 'temp',
                                self.liveryID, 'Liveries', self.folderName)
         os.chdir(currentDirectory)
-        if self.DazzleTopColour == (255,255,255):
-            first = changeColoursOfImage(
-            dazzlePath, (255, 255, 255), self.DazzleBottomColour)
-            first.save(carPath + "/decals.png")
-            final = changeColoursOfImage(
-            carPath + "/decals.png", (0, 0, 0), self.DazzleTopColour)
-            final.save(carPath + "/decals.png")
-            sponsorPng = os.path.join(currentDirectory, 'acc',
-                                  sponsorTemplate)  # copy sponsors.png and finish JSON from acc folder to livery folder
-        else:
-            first = changeColoursOfImage(
-                dazzlePath, (0, 0, 0), self.DazzleTopColour)
-            first.save(carPath + "/decals.png")
-            final = changeColoursOfImage(
-                carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
-            final.save(carPath + "/decals.png")
+        randomHex = ''.join(random.choice('0123456789ABCDEF') for _ in range(6))
+        placeholderColour = hexToTuple(randomHex)
+        while placeholderColour == self.DazzleTopColour or placeholderColour == self.DazzleBottomColour:
+            randomHex = ''.join(random.choice('0123456789ABCDEF') for _ in range(6))
+            placeholderColour = hexToTuple(randomHex)
+        placeholderColour = placeholderColour
+        tempChange = changeColoursOfImage(dazzlePath, (0, 0, 0), placeholderColour)
+        tempChange.save(carPath + "/decals.png")
+        first = changeColoursOfImage(carPath + "/decals.png", (255, 255, 255), self.DazzleBottomColour)
+        first.save(carPath + "/decals.png")
+        final = changeColoursOfImage(carPath + "/decals.png", placeholderColour, self.DazzleTopColour)
+        final.save(carPath + "/decals.png")
         sponsorPng = os.path.join(currentDirectory, 'acc',
                                   sponsorTemplate)  # copy sponsors.png and finish JSON from acc folder to livery folder
         sponsorJson = os.path.join(currentDirectory, 'acc', 'sponsors.json')
@@ -209,7 +209,8 @@ class ACCLivery:
         jsonDirectory = os.path.join(currentDirectory, "temp", self.liveryID)
         os.chdir(jsonDirectory)
         os.mkdir('Cars')
-        jsonDirectory = os.path.join(jsonDirectory, 'Cars', self.liveryID + '.json')
+        jsonDirectory = os.path.join(
+            jsonDirectory, 'Cars', self.liveryID + '.json')
         os.chdir(currentDirectory)
         shutil.copy(examplePath, jsonDirectory)
         with open(jsonDirectory, 'rb') as f:
@@ -242,5 +243,10 @@ class ACCLivery:
         tempDirectory = os.path.join(currentDirectory, 'temp')
         os.chdir(tempDirectory)
         shutil.make_archive(str(self.liveryID), 'zip', self.zipPath)
-        self.setZipPath(os.path.join(currentDirectory, 'temp', self.liveryID) + '.zip')
+        self.setZipPath(os.path.join(currentDirectory,
+                        'temp', self.liveryID) + '.zip')
         os.chdir(currentDirectory)
+
+
+class IRacingLivery:
+    pass
