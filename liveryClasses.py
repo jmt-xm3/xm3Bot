@@ -1,5 +1,5 @@
 from changeColour import change_colour as changeColoursOfImage
-
+from overlay import overlay_images
 import os
 import shutil
 import json
@@ -8,6 +8,10 @@ import random
 
 def hexToTuple(hex):
     return tuple(int(hex[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def random_rgb():
+    return random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
 
 
 currentDirectory = os.getcwd()
@@ -25,7 +29,14 @@ accCarModels = [{"carModelType": 8, "name": "BEN"}, {"carModelType": 20, "name":
                 {"carModelType": 23, "name": "991"}, {
                     "carModelType": 24, "name": "488EVO"},
                 {"carModelType": 32, "name": "296"}, {"carModelType": 31, "name": "EVO2"}]
-iracingCars = []
+
+iracingCars = [{"value": 201, "key": "Dallara P217", "files": "lmp2"},
+               {"value": 202, "key": "Dallara IR18", "file": "ir18"},
+               {"value": 203, "key": "Dallara F317", "file": "f317"},
+               {"value": 204, "key": "FIA F4", "file": "fiaf4"}, {"value": 205, "key": "Mazda MX5 Cup", "file": "mx5"},
+               {"value": 206, "key": "Dirt Late Model", "file": "latemodel"},
+               {"value": 207, "key": "Dirt Sprint Car", "file": "sprint"},
+               {"value": 208, "key": "Dirt", "file": "midget"}]
 
 
 class ACCLivery:
@@ -244,9 +255,75 @@ class ACCLivery:
         os.chdir(tempDirectory)
         shutil.make_archive(str(self.liveryID), 'zip', self.zipPath)
         self.setZipPath(os.path.join(currentDirectory,
-                        'temp', self.liveryID) + '.zip')
+                                     'temp', self.liveryID) + '.zip')
         os.chdir(currentDirectory)
 
 
-class IRacingLivery:
-    pass
+class iRacingLivery:
+    def __init__(self):
+        self.name = str(random.randint(1, 10000))
+        self.path = os.path.join(currentDirectory, "temp", (self.name + '.png'))
+        self.base_colour = (255, 0, 0)
+        self.dazzle1 = (0, 255, 0)
+        self.dazzle2 = (0, 0, 255)
+        self.car = "lmp2"
+
+    def set_name(self, name):
+        self.name = name
+
+    def set_path(self, path):
+        self.path = path
+
+    def set_base_colour(self, base_colour):
+        self.base_colour = base_colour
+
+    def set_dazzle1(self, dazzle1):
+        self.dazzle1 = dazzle1
+
+    def set_dazzle2(self, dazzle2):
+        self.dazzle2 = dazzle2
+
+    def set_car(self, car):
+        self.car = car
+
+    def get_name(self):
+        return self.name
+
+    def get_path(self):
+        return self.path
+
+    def get_base_colour(self):
+        return self.base_colour
+
+    def get_dazzle1(self):
+        return self.dazzle1
+
+    def get_dazzle2(self):
+        return self.dazzle2
+
+    def get_car(self):
+        return self.car
+
+    def create_livery(self):
+        specMap = os.path.join(currentDirectory, 'iracing', (self.car + 'spec.mip'))
+        dazzlePath = os.path.join(currentDirectory, 'iracing', (self.car + 'dazzle.png'))
+        sponsorPath = os.path.join(currentDirectory, 'iracing', (self.car + 'sponsors.png'))
+        shutil.copy(dazzlePath, self.path)
+        placeholder1 = random_rgb()
+        while placeholder1 == (255, 0, 0) or placeholder1 == (0, 255, 0) or placeholder1 == (0, 0, 255):
+            placeholder1 = random_rgb()
+        temp = changeColoursOfImage(self.path, (0, 255, 0), placeholder1, tolerance=5)
+        temp.save(self.path)
+        placeholder2 = random_rgb()
+        while placeholder2 == (255, 0, 0) or placeholder2 == (0, 255, 0) or placeholder2 == (0, 0, 255):
+            placeholder2 = random_rgb()
+        temp1 = changeColoursOfImage(self.path, (0, 0, 255), placeholder2, tolerance=5)
+        temp1.save(self.path)
+        red = changeColoursOfImage(self.path, (255, 0, 0), self.base_colour, tolerance=5)
+        red.save(self.path)
+        blue = changeColoursOfImage(self.path, placeholder2, self.dazzle1, tolerance=5)
+        blue.save(self.path)
+        green = changeColoursOfImage(self.path, placeholder1, self.dazzle2, tolerance=5)
+        green.save(self.path)
+        overlay_images(self.path, sponsorPath, self.path)
+        return specMap, self.path
