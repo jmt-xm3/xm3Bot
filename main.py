@@ -132,7 +132,8 @@ for f in materials:
     finishes.append(discord.app_commands.Choice(
         name=f['key'], value=f['value']))
 iracingChoices = []
-for i in iracingCars:
+sorted_iracing = sorted(iracingCars, key=lambda x: x['key'])
+for i in sorted_iracing:
     iracingChoices.append(discord.app_commands.Choice(
         name=i['key'], value=i['value']))
 

@@ -30,13 +30,20 @@ accCarModels = [{"carModelType": 8, "name": "BEN"}, {"carModelType": 20, "name":
                     "carModelType": 24, "name": "488EVO"},
                 {"carModelType": 32, "name": "296"}, {"carModelType": 31, "name": "EVO2"}]
 
-iracingCars = [{"value": 201, "key": "Dallara P217", "files": "lmp2"},
+iracingCars = [{"value": 201, "key": "Dallara P217", "file": "lmp2"},
                {"value": 202, "key": "Dallara IR18", "file": "ir18"},
                {"value": 203, "key": "Dallara F317", "file": "f317"},
                {"value": 204, "key": "FIA F4", "file": "fiaf4"}, {"value": 205, "key": "Mazda MX5 Cup", "file": "mx5"},
                {"value": 206, "key": "Dirt Late Model", "file": "latemodel"},
                {"value": 207, "key": "Dirt Sprint Car", "file": "sprint"},
-               {"value": 208, "key": "Dirt", "file": "midget"}]
+               {"value": 208, "key": "Dirt Midget", "file": "midget"},
+               {"value": 209, "key": "Dirt Street Stock", "file": "dss"},
+               {"value": 210, "key": "NASCAR Truck Series Ford F-150", "file": "f150"},
+               {"value": 212, "key": "NASCAR Truck Series Chevrolet Silverado", "file": "silverado"},
+               {"value": 213, "key": "NASCAR Truck Series Toyota Tundra TRD", "file": "trd"},
+               {"value": 214, "key": "NASCAR Xfinity Series Chevrolet Camaro", "file": "xcam"},
+               {"value": 215, "key": "NASCAR Xfinity Series Ford Mustang", "file": "xford"},
+               {"value": 216, "key": "NASCAR Xfinity Series Toyota Supra", "file": "xsupra"}]
 
 
 class ACCLivery:
@@ -305,25 +312,24 @@ class iRacingLivery:
         return self.car
 
     def create_livery(self):
+        from PIL import Image
         specMap = os.path.join(currentDirectory, 'iracing', (self.car + 'spec.mip'))
         dazzlePath = os.path.join(currentDirectory, 'iracing', (self.car + 'dazzle.png'))
         sponsorPath = os.path.join(currentDirectory, 'iracing', (self.car + 'sponsors.png'))
-        shutil.copy(dazzlePath, self.path)
-        placeholder1 = random_rgb()
-        while placeholder1 == (255, 0, 0) or placeholder1 == (0, 255, 0) or placeholder1 == (0, 0, 255):
-            placeholder1 = random_rgb()
-        temp = changeColoursOfImage(self.path, (0, 255, 0), placeholder1, tolerance=5)
-        temp.save(self.path)
-        placeholder2 = random_rgb()
-        while placeholder2 == (255, 0, 0) or placeholder2 == (0, 255, 0) or placeholder2 == (0, 0, 255):
-            placeholder2 = random_rgb()
-        temp1 = changeColoursOfImage(self.path, (0, 0, 255), placeholder2, tolerance=5)
-        temp1.save(self.path)
-        red = changeColoursOfImage(self.path, (255, 0, 0), self.base_colour, tolerance=5)
-        red.save(self.path)
-        blue = changeColoursOfImage(self.path, placeholder2, self.dazzle1, tolerance=5)
-        blue.save(self.path)
-        green = changeColoursOfImage(self.path, placeholder1, self.dazzle2, tolerance=5)
-        green.save(self.path)
+        dazzleCopyPath = os.path.join(currentDirectory, "temp", (self.name + 'dazzle.png'))
+        base = Image.new('RGB', (2048, 2048), self.base_colour)
+        base.save(self.path)
+        shutil.copy(dazzlePath, dazzleCopyPath)
+        if self.dazzle1 == (255, 255, 255):
+            dazzle = changeColoursOfImage(dazzleCopyPath, (255, 255, 255), self.dazzle2)
+            dazzle.save(dazzleCopyPath)
+            dazzle = changeColoursOfImage(dazzleCopyPath, (0, 0, 0), self.dazzle1)
+            dazzle.save(dazzleCopyPath)
+        else:
+            dazzle = changeColoursOfImage(dazzleCopyPath, (0, 0, 0), self.dazzle1)
+            dazzle.save(dazzleCopyPath)
+            dazzle = changeColoursOfImage(dazzleCopyPath, (255, 255, 255), self.dazzle2)
+            dazzle.save(dazzleCopyPath)
+        overlay_images(self.path, dazzleCopyPath, self.path)
         overlay_images(self.path, sponsorPath, self.path)
         return specMap, self.path
