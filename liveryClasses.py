@@ -43,7 +43,8 @@ iracingCars = [{"value": 201, "key": "Dallara P217", "file": "lmp2"},
                {"value": 213, "key": "NASCAR Truck Series Toyota Tundra TRD", "file": "trd"},
                {"value": 214, "key": "NASCAR Xfinity Series Chevrolet Camaro", "file": "xcam"},
                {"value": 215, "key": "NASCAR Xfinity Series Ford Mustang", "file": "xford"},
-               {"value": 216, "key": "NASCAR Xfinity Series Toyota Supra", "file": "xsupra"}]
+               {"value": 216, "key": "NASCAR Xfinity Series Toyota Supra", "file": "xsupra"},
+               {"value": 217, "key": "Super Formula SF23", "file": "sf23"}]
 
 
 class ACCLivery:
