@@ -392,6 +392,7 @@ async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choi
                 column_names = [description[0]
                                 for description in cur.description]
                 userPref = dict(zip(column_names, user_data))
+                folderName = userPref['livery_name'] + '' + car.name
                 daz1 = hexToTuple(userPref['dazzle1'])
                 daz2 = hexToTuple(userPref['dazzle2'])
                 car1 = ACCLivery()
@@ -400,7 +401,7 @@ async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choi
                 car1.setBaseColour(userPref['base_colour_acc'])
                 car1.setBaseMaterialId(userPref['finish'])
                 car1.setCarModelType(car.value)
-                car1.setFolderName(userPref['livery_name'])
+                car1.setFolderName(folderName)
                 car1.setInGameName(userPref['livery_name'])
                 car1.setRaceNumber(userPref['race_number'])
                 await interaction.response.defer()
