@@ -4,7 +4,7 @@ import os
 import shutil
 import datetime
 import sqlite3
-from liveryClasses import accCarModels, ACCLivery, iRacingLivery, iracingCars
+from liveryClasses import accCarModels, ACCLivery, iRacingLivery, iracingCars, iracingCars1
 from discord.ext import commands, tasks
 
 conn = sqlite3.connect('preferences.db')
@@ -137,6 +137,12 @@ for i in sorted_iracing:
     iracingChoices.append(discord.app_commands.Choice(
         name=i['key'], value=i['value']))
 
+iracingChoices1 = []
+sorted_iracing = sorted(iracingCars1, key=lambda x: x['key'])
+for i in sorted_iracing:
+    iracingChoices1.append(discord.app_commands.Choice(
+        name=i['key'], value=i['value']))
+
 allCars = accCars + iracingChoices  # I am paying for my awful variable names
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
@@ -208,7 +214,7 @@ async def xm3help(interaction: discord.Interaction):
 
 
 @bot.tree.command(name="reviracing", description='Standard REVSPORT IRacing livery')
-@discord.app_commands.describe(car="Car model in ACC",
+@discord.app_commands.describe(car="Car model in Iracing",
                                base_colour="Hex code of base paint of car (F1F1F1 as an example)",
                                dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
                                dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
@@ -229,6 +235,43 @@ async def revsportIRacing(interaction: discord.Interaction, car: discord.app_com
             return
         car1 = iRacingLivery()
         for x in iracingCars:
+            if x["value"] == car.value:
+                chosen = x
+                break
+        await interaction.response.defer()
+        car1.set_car(chosen['file'])
+        car1.set_dazzle1(daze1)
+        car1.set_dazzle2(daze2)
+        car1.set_base_colour(base)
+        await interaction.followup.send('finishing touches...')
+        specMap, carPath = car1.create_livery()
+        await interaction.followup.send(
+            content=f"Here is your {chosen['key']}, upload it on trading paints under 'Just Me' ",
+            files=[discord.File(specMap), discord.File(carPath)])
+
+
+@bot.tree.command(name="reviracing2", description='Standard REVSPORT IRacing livery (car set 2)')
+@discord.app_commands.describe(car="Car model in IRacing",
+                               base_colour="Hex code of base paint of car (F1F1F1 as an example)",
+                               dazzle1='Hex code of top dazzle (F1F1F1 as an example)',
+                               dazzle2='Hex code of bottom dazzle (F1F1F1 as an example)')
+@discord.app_commands.choices(car=iracingChoices1)
+async def revsportIRacing(interaction: discord.Interaction, car: discord.app_commands.Choice[int], base_colour: str,
+                          dazzle1: str, dazzle2: str):
+    if interaction.user.id in blacklist:
+        await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
+    else:
+        try:
+            daze1 = hexToTuple(dazzle1)
+            daze2 = hexToTuple(dazzle2)
+            base = hexToTuple(base_colour)
+        except Exception as e:
+            print(e)
+            await interaction.response.send_message(
+                f"Give me a valid hex code (maybe you had a # by accident) /xm3help", ephemeral=True)
+            return
+        car1 = iRacingLivery()
+        for x in iracingCars1:
             if x["value"] == car.value:
                 chosen = x
                 break
@@ -425,7 +468,7 @@ async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choi
 
 @bot.tree.command(name="myreviracing",
                   description='iRacing Revsport Livery based on preferences set in /carpreferences')
-@discord.app_commands.describe(car="Car model in ACC/iRacing")
+@discord.app_commands.describe(car="Car model in iRacing")
 @discord.app_commands.choices(car=iracingChoices)
 async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choice[int]):
     if interaction.user.id not in blacklist:
@@ -443,6 +486,51 @@ async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choi
                 chosen = {}
                 await interaction.response.defer()
                 for x in iracingCars:
+                    if x["value"] == car.value:
+                        chosen = x
+                        break
+                daze1 = hexToTuple(userPref['dazzle1'])
+                daze2 = hexToTuple(userPref['dazzle2'])
+                base = hexToTuple(userPref['base_colour'])
+                car1.set_car(chosen['file'])
+                car1.set_dazzle1(daze1)
+                car1.set_dazzle2(daze2)
+                car1.set_base_colour(base)
+                await interaction.followup.send('finishing touches...')
+                specMap, carPath = car1.create_livery()
+                await interaction.followup.send(
+                    content=f"Here is your {chosen['key']}, upload it on trading paints under 'Just Me' ",
+                    files=[discord.File(specMap), discord.File(carPath)])
+            else:
+                await interaction.response.send_message(f"User not found try /carpreferences first", ephemeral=True)
+        except sqlite3.Error as e:
+            print("SQLite error:", e)
+        finally:
+            conn.close()  # Make sure to close the connection when done
+    else:
+        await interaction.response.send_message(f"You are not permitted to do that", ephemeral=True)
+
+
+@bot.tree.command(name="myreviracing2",
+                  description='iRacing Revsport Livery based on preferences set in /carpreferences')
+@discord.app_commands.describe(car="Car model in iRacing")
+@discord.app_commands.choices(car=iracingChoices1)
+async def myCar(interaction: discord.Interaction, car: discord.app_commands.Choice[int]):
+    if interaction.user.id not in blacklist:
+        try:
+            conn = sqlite3.connect("preferences.db")
+            cur = conn.cursor()
+            user_id = int(interaction.user.id)
+            cur.execute("SELECT * FROM user WHERE id = ?", (user_id,))
+            user_data = cur.fetchone()  # Assuming you're expecting one row
+            if user_data:
+                column_names = [description[0]
+                                for description in cur.description]
+                userPref = dict(zip(column_names, user_data))
+                car1 = iRacingLivery()
+                chosen = {}
+                await interaction.response.defer()
+                for x in iracingCars1:
                     if x["value"] == car.value:
                         chosen = x
                         break

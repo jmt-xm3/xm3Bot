@@ -48,8 +48,17 @@ iracingCars = [{"value": 201, "key": "Dallara P217", "file": "lmp2"},
                {"value": 216, "key": "NASCAR Xfinity Series Toyota Supra", "file": "xsupra"},
                {"value": 217, "key": "Super Formula SF23 Toyota", "file": "sftoyota"},
                {"value": 218, "key": "Super Formula SF23 Honda", "file": "sfhonda"},
+               {"value": 219, "key": "BMW M Hybrid V8", "file": "bmwlmdh"},
+               {"value": 220, "key": "BMW M4 GT3", "file": "bmw"},
+               {"value": 221, "key": "BMW M4 GT3 (IMSA PLATES)", "file": "bmwimsa"},
+               {"value": 222, "key": "Ray FF1600", "file": "ray"},
+               {"value": 223, "key": "Ligier JS P320", "file": "lmp3"},
+               {"value": 224, "key": "Cadillac V-Series.R", "file": "caddy"},
+               {"value": 225, "key": "Formula Vee", "file": "vee"},
+               {"value": 226, "key": "Toyota GR86", "file": "gr"},
                ]
 
+iracingCars1 = [{"value": 227, "key": "Porsche Mission R", "file": "mr"}]
 
 class ACCLivery:
     def __init__(self):
