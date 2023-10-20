@@ -145,16 +145,11 @@ for i in sorted_iracing:
 
 allCars = accCars + iracingChoices  # I am paying for my awful variable names
 
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
 
-@tasks.loop(seconds=43200)
-async def clearTempDirectory():
-    print('clearing temp every 12 hours')
-    await asyncio.sleep(1)
-    shutil.rmtree(tempDirectory)
-    os.mkdir("temp")
-    print('temp is cleared')
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix='.',intents=discord.Intents.all())
+
 
 
 @bot.event
@@ -163,16 +158,15 @@ async def on_ready():
     print('------')
     print('free tay k 47')
     print('------')
-    testGuild = discord.Object(id=1130434664587346011)
-    try:
-        bot.tree.copy_global_to(guild=testGuild)
-        print(f'Synced commands')
-    except Exception as e:
-        print(e)
-
     clearTempDirectory.start()
-    bot.appinfo = await bot.application_info()
 
+@tasks.loop(seconds=43200)
+async def clearTempDirectory():
+    print('clearing temp every 12 hours')
+    await asyncio.sleep(1)
+    shutil.rmtree(tempDirectory)
+    os.mkdir("temp")
+    print('temp is cleared')
 
 @bot.tree.command(name='xm3time')
 async def xm3time(interaction: discord.Interaction):
