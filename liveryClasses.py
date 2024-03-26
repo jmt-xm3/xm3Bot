@@ -32,20 +32,12 @@ accCarModels = [{"carModelType": 8, "name": "BEN"}, {"carModelType": 20, "name":
                     "carModelType": 24, "name": "488EVO"},
                 {"carModelType": 32, "name": "296"}, {"carModelType": 31, "name": "EVO2"}]
 
-iracingCars = [{"value": 201, "key": "Dallara P217", "file": "lmp2"},
+iracingCars = [{"value": 201, "key": "Porsche Mission R", "file": "mr"},
                {"value": 202, "key": "Dallara IR18", "file": "ir18"},
                {"value": 203, "key": "Dallara F317", "file": "f317"},
                {"value": 204, "key": "FIA F4", "file": "fiaf4"}, {"value": 205, "key": "Mazda MX5 Cup", "file": "mx5"},
-               {"value": 206, "key": "Dirt Late Model", "file": "latemodel"},
-               {"value": 207, "key": "Dirt Sprint Car", "file": "sprint"},
-               {"value": 208, "key": "Dirt Midget", "file": "midget"},
-               {"value": 209, "key": "Dirt Street Stock", "file": "dss"},
-               {"value": 210, "key": "NASCAR Truck Series Ford F-150", "file": "f150"},
-               {"value": 212, "key": "NASCAR Truck Series Chevrolet Silverado", "file": "silverado"},
-               {"value": 213, "key": "NASCAR Truck Series Toyota Tundra TRD", "file": "trd"},
-               {"value": 214, "key": "NASCAR Xfinity Series Chevrolet Camaro", "file": "xcam"},
-               {"value": 215, "key": "NASCAR Xfinity Series Ford Mustang", "file": "xford"},
-               {"value": 216, "key": "NASCAR Xfinity Series Toyota Supra", "file": "xsupra"},
+               {"value": 227, "key": "Dallara P217", "file": "p2"},
+               {"value": 228, "key": "Dallara P217 (IMSA PLATES)", "file": "p2imsa"},
                {"value": 217, "key": "Super Formula SF23 Toyota", "file": "sftoyota"},
                {"value": 218, "key": "Super Formula SF23 Honda", "file": "sfhonda"},
                {"value": 219, "key": "BMW M Hybrid V8", "file": "bmwlmdh"},
@@ -56,9 +48,29 @@ iracingCars = [{"value": 201, "key": "Dallara P217", "file": "lmp2"},
                {"value": 224, "key": "Cadillac V-Series.R", "file": "caddy"},
                {"value": 225, "key": "Formula Vee", "file": "vee"},
                {"value": 226, "key": "Toyota GR86", "file": "gr"},
-               ]
+               {"value": 231, "key": "Ferrari 296", "file": "296"},
+               {"value": 232, "key": "Porsche 911 GT3 Cup (992)", "file": "992C"},
+               {"value": 233, "key": "Porsche 963", "file": "963"},
+               {"value": 234, "key": "Porsche 992 GT3", "file": "992"},
+               {"value": 235, "key": "Porsche 992 GT3 (IMSA PLATES)", "file": "992imsa"},
+               {"value": 229, "key": "Super Formula Light (Dallara 324)", "file": "324"}]
 
-iracingCars1 = [{"value": 227, "key": "Porsche Mission R", "file": "mr"}]
+iracingCars1 = [
+    {"value": 230, "key": "Dirt Micro Sprint Car", "file": "dm"},
+    {"value": 206, "key": "Dirt Late Model", "file": "latemodel"},
+    {"value": 207, "key": "Dirt Sprint Car", "file": "sprint"},
+    {"value": 208, "key": "Dirt Midget", "file": "midget"},
+    {"value": 209, "key": "Dirt Street Stock", "file": "dss"},
+    {"value": 210, "key": "NASCAR Truck Series Ford F-150", "file": "f150"},
+    {"value": 212, "key": "NASCAR Truck Series Chevrolet Silverado", "file": "silverado"},
+    {"value": 213, "key": "NASCAR Truck Series Toyota Tundra TRD", "file": "trd"},
+    {"value": 214, "key": "NASCAR Xfinity Series Chevrolet Camaro", "file": "xcam"},
+    {"value": 215, "key": "NASCAR Xfinity Series Ford Mustang", "file": "xford"},
+    {"value": 216, "key": "NASCAR Xfinity Series Toyota Supra", "file": "xsupra"},
+    {"value": 236, "key": "Next Gen NASCAR Cup Series Chevrolet Camaro ZL1", "file": "cam"},
+    {"value": 237, "key": "Next Gen NASCAR Cup Series Ford Mustang", "file": "ford"},
+    {"value": 238, "key": "Next Gen NASCAR Cup Series Toyota Camry", "file": "toy"}]
+
 
 class ACCLivery:
     def __init__(self):

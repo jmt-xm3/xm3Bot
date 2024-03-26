@@ -7,9 +7,9 @@ import sqlite3
 from liveryClasses import accCarModels, ACCLivery, iRacingLivery, iracingCars, iracingCars1
 from discord.ext import commands, tasks
 
-conn = sqlite3.connect('preferences.db')
-cur = conn.cursor()
-cur.execute("""CREATE TABLE IF NOT EXISTS user
+con = sqlite3.connect('preferences.db')
+curs = con.cursor()
+curs.execute("""CREATE TABLE IF NOT EXISTS user
             (id INTEGER PRIMARY KEY, 
             livery_name varchar(100) NOT NULL,
             race_number INT,
@@ -18,38 +18,30 @@ cur.execute("""CREATE TABLE IF NOT EXISTS user
             base_colour varchar(6) NOT NULL,
             dazzle1 varchar(6) NOT NULL, 
             dazzle2 varchar(6) NOT NULL)""")
-conn.commit()
-conn.close()
+con.commit()
+con.close()
 
 with open('token.txt', 'r') as f:
     token = f.read()
 
 
 def hexToTuple(hexadecimal):
+    if hexadecimal.startswith('#'):
+        hexadecimal = hexadecimal[1:]
     return tuple(int(hexadecimal[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def is_valid_folder_name(folder_name):  # chatgpt wrote this shit
-    # Define the set of characters not allowed in folder names
+def is_valid_folder_name(folder_name):
     invalid_chars_windows = '<>:"/\\|?*'
     invalid_chars_unix = '/'
-
-    # Check if the folder name is empty
     if not folder_name.strip():
         return False
-
-    # Check for invalid characters based on the operating system
-    if os.name == 'nt':  # Windows
+    if os.name == 'nt':
         invalid_chars = invalid_chars_windows
-    else:  # Unix-like systems (Linux, macOS)
+    else:
         invalid_chars = invalid_chars_unix
-
-    # Check if the folder name contains any invalid characters
     if any(char in invalid_chars for char in folder_name):
         return False
-
-    # Check for reserved names in Windows (CON, PRN, AUX, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9,
-    # LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9)
     if os.name == 'nt':
         reserved_names = {'CON', 'PRN', 'AUX', 'NUL'}
         reserved_names.update('COM{}'.format(i) for i in range(1, 10))
@@ -61,7 +53,7 @@ def is_valid_folder_name(folder_name):  # chatgpt wrote this shit
     return True
 
 
-blacklist = []
+blacklist = [238400056942657538,]
 currentDirectory = os.getcwd()
 tempDirectory = os.path.join(currentDirectory, 'temp')
 startTime = datetime.datetime.now()
@@ -145,11 +137,8 @@ for i in sorted_iracing:
 
 allCars = accCars + iracingChoices  # I am paying for my awful variable names
 
-
-
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix='.',intents=discord.Intents.all())
-
+bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 
 
 @bot.event
@@ -160,6 +149,7 @@ async def on_ready():
     print('------')
     clearTempDirectory.start()
 
+
 @tasks.loop(seconds=43200)
 async def clearTempDirectory():
     print('clearing temp every 12 hours')
@@ -167,6 +157,7 @@ async def clearTempDirectory():
     shutil.rmtree(tempDirectory)
     os.mkdir("temp")
     print('temp is cleared')
+
 
 @bot.tree.command(name='xm3time')
 async def xm3time(interaction: discord.Interaction):
@@ -197,7 +188,7 @@ async def xm3sync(interaction: discord.Interaction):
 @bot.tree.command(name="xm3credits")
 async def xm3credits(interaction: discord.Interaction):
     await interaction.response.send_message(
-        f'credit to Marley (brexite) for making basically every one of these liveries.', ephemeral=True)
+        f'Credit to Marley (brexite) for making the original REVSPORT INTERNATIONAL livery, Pete (Simber1) for the liveries for NASCAR Trucks and Jack for allowing me to modify his Porsche 992 for the this bot.', ephemeral=True)
 
 
 @bot.tree.command(name="xm3help")
@@ -225,7 +216,7 @@ async def revsportIRacing(interaction: discord.Interaction, car: discord.app_com
         except Exception as e:
             print(e)
             await interaction.response.send_message(
-                f"Give me a valid hex code (maybe you had a # by accident) /xm3help", ephemeral=True)
+                f"Give me a valid hex code", ephemeral=True)
             return
         car1 = iRacingLivery()
         for x in iracingCars:
@@ -262,7 +253,7 @@ async def revsportIRacing(interaction: discord.Interaction, car: discord.app_com
         except Exception as e:
             print(e)
             await interaction.response.send_message(
-                f"Give me a valid hex code (maybe you had a # by accident) /xm3help", ephemeral=True)
+                f"Give me a valid hex code", ephemeral=True)
             return
         car1 = iRacingLivery()
         for x in iracingCars1:
@@ -306,7 +297,7 @@ async def carPreferences(interaction: discord.Interaction, livery_name: str,
         hexToTuple(base_colour)
     except Exception as e:
         print(e)
-        await interaction.response.send_message(f"Give me a valid hex code (maybe you had a # by accident) /xm3help",
+        await interaction.response.send_message(f"Give me a valid hex code",
                                                 ephemeral=True)
         return
     try:
@@ -369,7 +360,7 @@ async def revsportACC(interaction: discord.Interaction, livery_name: str, car: d
         dazzle2rgb = hexToTuple(dazzle2)
     except Exception as e:
         print(e)
-        await interaction.response.send_message(f"Give me a valid hex code (maybe you had a # by accident) /xm3help",
+        await interaction.response.send_message(f"Give me a valid hex code",
                                                 ephemeral=True)
         return
     try:

@@ -4,3 +4,8 @@
 /__pycache__
 /token.txt
 /preferences.db
+
+*.txt
+
+token.txt
+token.txt
